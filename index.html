@@ -152,33 +152,6 @@
       font-weight: 400;
     }
 
-    /* ABOUT */
-    .about-text {
-      max-width: 520px;
-      margin-bottom: 2.5rem;
-      color: var(--text);
-      font-size: 13px;
-      line-height: 1.9;
-    }
-
-    .skill-group h4 {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 0.8rem;
-    }
-
-    .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
-
-    .tag {
-      padding: 0.2rem 0.6rem;
-      border: 1px solid var(--border);
-      font-size: 11px;
-      color: var(--text-dim);
-      background: var(--bg2);
-    }
-
     /* TIMELINE */
     .timeline { display: flex; flex-direction: column; }
 
@@ -224,8 +197,22 @@
       padding: 2rem;
       background: var(--bg2);
       transition: border-color 0.2s;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
     }
     .project-card:hover { border-color: #aaa; }
+
+    .project-content { grid-column: 1; }
+
+    .project-logo {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
 
     .project-card h2 { margin-bottom: 0.7rem; }
     .project-card p {
@@ -258,6 +245,8 @@
       main { padding: 0 1.4rem; }
       h1 { font-size: 2.8rem; }
       .tl-item { grid-template-columns: 1fr; gap: 0.2rem; }
+      .project-card { grid-template-columns: 1fr; }
+      .project-logo { grid-column: 1; grid-row: auto; width: 60px; height: 60px; }
     }
   </style>
 </head>
@@ -266,7 +255,6 @@
   <nav>
     <a href="#hero" class="nav-logo">FD</a>
     <ul class="nav-links">
-      <li><a href="#about">About</a></li>
       <li><a href="#experience">Exp</a></li>
       <li><a href="#education">Edu</a></li>
       <li><a href="#projects">Projects</a></li>
@@ -282,27 +270,6 @@
         <a href="https://www.linkedin.com/in/flynn-diener/" class="btn" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/fly-die" class="btn" target="_blank" rel="noopener">GitHub</a>
         <a href="mailto:flynn.diener@gmail.com" class="btn">Email</a>
-      </div>
-    </section>
-
-    <section id="about">
-      <p class="section-label">About</p>
-      <div class="about-text">
-        22-year-old Computer Science student at the University of Zurich, specialising in Business Informatics with a minor in Software Systems.
-      </div>
-      <div class="skill-group">
-        <h4>Languages & Tools</h4>
-        <div class="skill-tags">
-          <span class="tag">Python</span>
-          <span class="tag">Java</span>
-          <span class="tag">C</span>
-          <span class="tag">HTML/CSS</span>
-          <span class="tag">JavaScript</span>
-          <span class="tag">Git</span>
-          <span class="tag">VS Code</span>
-          <span class="tag">SAP</span>
-          <span class="tag">BPMN</span>
-        </div>
       </div>
     </section>
 
@@ -356,20 +323,24 @@
     <section id="projects">
       <p class="section-label">Projects</p>
       <div class="project-card">
-        <div class="project-meta">
-          <span class="tag">2026</span>
-          <span class="tag">Group Project</span>
+        <div class="project-content">
+          <div class="project-meta">
+            <span class="tag">2026</span>
+            <span class="tag">Group Project</span>
+          </div>
+          <h2>Movieblendr</h2>
+          <p>
+            A weighted graph-based movie recommendation algorithm. Uses Levenshtein distance estimation to calculate ideal movie overlap between users, surfacing personalised recommendations from a shar[...]
+          </p>
+          <div class="project-stack">
+            <span class="tag">Python</span>
+            <span class="tag">Java</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">React</span>
+          </div>
+          <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="btn btn-primary" target="_blank" rel="noopener">Try here</a>
         </div>
-        <h2>Movieblendr</h2>
-        <p>
-          A weighted graph-based movie recommendation algorithm. Uses Levenshtein distance estimation to calculate ideal movie overlap between users, surfacing personalised recommendations from a shared preference space.
-        </p>
-        <div class="project-stack">
-          <span class="tag">Java</span>
-          <span class="tag">React</span>
-          <span class="tag">Algorithms</span>
-        </div>
-        <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="btn btn-primary" target="_blank" rel="noopener">Try here</a>
+        <img src="/public/logo.png" alt="Movieblendr" class="project-logo" />
       </div>
     </section>
 
