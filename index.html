@@ -171,6 +171,17 @@
     }
     .btn-secondary:hover { border-color: var(--text); color: var(--text); }
 
+    /* INLINE LINKS */
+    a.org-link {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.15s, text-decoration 0.15s;
+    }
+    a.org-link:hover {
+      color: var(--text);
+      text-decoration: underline;
+    }
+
     /* SECTIONS */
     section { padding: 5rem 0; border-top: 1px solid var(--border); }
 
@@ -244,13 +255,16 @@
       background: var(--bg2);
       transition: border-color 0.2s;
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 2rem;
+      grid-template-columns: 1fr;
+      gap: 0;
       align-items: start;
     }
     .project-card:hover { border-color: #aaa; }
 
-    .project-content { grid-column: 1; }
+    .project-content {
+      display: flex;
+      flex-direction: column;
+    }
 
     .project-header {
       display: flex;
@@ -300,6 +314,8 @@
       display: flex;
       gap: 0.5rem;
       flex-wrap: wrap;
+      align-self: flex-end;
+      margin-top: auto;
     }
 
     @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -314,6 +330,7 @@
       .project-header { gap: 0.75rem; }
       .project-logo-inline { width: 40px; height: 40px; }
       .project-title { font-size: 16px; }
+      .project-buttons { align-self: flex-start; }
     }
   </style>
 </head>
@@ -333,7 +350,7 @@
 
     <section id="hero">
       <h1>Flynn Diener</h1>
-      <p class="hero-sub">CS Student @ UZH</p>
+      <p class="hero-sub">CS Student @ <a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">UZH</a></p>
       <div class="hero-links">
         <a href="https://www.linkedin.com/in/flynn-diener/" class="btn" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/fly-die" class="btn" target="_blank" rel="noopener">GitHub</a>
@@ -349,7 +366,7 @@
           <div class="tl-date">2024 – 2027</div>
           <div class="tl-content">
             <h2>BSc Computer Science</h2>
-            <h3>University of Zurich (UZH) – Major: Business Informatics • Minor: Software Systems</h3>
+            <h3><a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">University of Zurich (UZH)</a> – Major: Business Informatics • Minor: Software Systems</h3>
 
           </div>
         </div>
@@ -358,7 +375,7 @@
           <div class="tl-date">2016 – 2023</div>
           <div class="tl-content">
             <h2>Economics & Law</h2>
-            <h3>Freies Gymnasium Zürich</h3>
+            <h3><a href="https://fgz.ch" class="org-link" target="_blank" rel="noopener">Freies Gymnasium Zürich</a></h3>
           </div>
         </div>
 
@@ -386,7 +403,7 @@
           <div class="tl-date">Jun – Sep 2026</div>
           <div class="tl-content">
             <h2>Software Engineer Intern <span class="badge-upcoming">upcoming</span></h2>
-            <h3>Hamilton Medical AG — Bonaduz</h3>
+            <h3><a href="https://www.hamilton-medical.com/" class="org-link" target="_blank" rel="noopener">Hamilton Medical AG</a> — Bonaduz</h3>
           </div>
         </div>
 
@@ -394,7 +411,7 @@
           <div class="tl-date">Apr – Jul 2024</div>
           <div class="tl-content">
             <h2>Research Intern</h2>
-            <h3>UPGREAT AG — Fehraltorf</h3>
+            <h3><a href="https://upgreat.ch" class="org-link" target="_blank" rel="noopener">UPGREAT AG</a> — Fehraltorf</h3>
           </div>
         </div>
 
