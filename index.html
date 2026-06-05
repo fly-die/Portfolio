@@ -290,6 +290,24 @@
       margin-bottom: 1.5rem;
     }
 
+    .project-repos {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .project-repos a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .project-repos a:hover {
+      color: var(--text);
+    }
+
     @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
     @media (max-width: 600px) {
@@ -411,6 +429,10 @@
             <span class="tag">React</span>
           </div>
           <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="btn btn-primary" target="_blank" rel="noopener">Try here</a>
+        </div>
+        <div class="project-repos">
+          <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" target="_blank" rel="noopener">@ fabianbaechli/sopra-fs26-group-41-client</a>
+          <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" target="_blank" rel="noopener">@ fabianbaechli/sopra-fs26-group-41-server</a>
         </div>
       </div>
     </section>
