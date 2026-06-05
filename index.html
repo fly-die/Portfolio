@@ -95,6 +95,45 @@
       animation: fadein 0.6s 0.35s forwards;
     }
 
+    .skill-group {
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadein 0.6s 0.4s forwards;
+    }
+
+    h4 {
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: border-color 0.15s, color 0.15s;
+      background: transparent;
+    }
+
+    .tag:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
+
     .hero-links {
       display: flex;
       gap: 0.7rem;
@@ -266,6 +305,20 @@
     <section id="hero">
       <h1>Flynn<br>Diener</h1>
       <p class="hero-sub">CS Student @ UZH</p>
+      <div class="skill-group">
+        <h4>Languages & Tools</h4>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Java</span>
+          <span class="tag">C</span>
+          <span class="tag">HTML/CSS</span>
+          <span class="tag">JavaScript</span>
+          <span class="tag">Git</span>
+          <span class="tag">VS Code</span>
+          <span class="tag">SAP</span>
+          <span class="tag">BPMN</span>
+        </div>
+      </div>
       <div class="hero-links">
         <a href="https://www.linkedin.com/in/flynn-diener/" class="btn" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/fly-die" class="btn" target="_blank" rel="noopener">GitHub</a>
@@ -330,7 +383,7 @@
           </div>
           <h2>Movieblendr</h2>
           <p>
-            A weighted graph-based movie recommendation algorithm. Uses Levenshtein distance estimation to calculate ideal movie overlap between users, surfacing personalised recommendations from a shar[...]
+            A weighted graph-based movie recommendation algorithm. Uses Levenshtein distance estimation to calculate ideal movie overlap between users, surfacing personalised recommendations from a sh[...]
           </p>
           <div class="project-stack">
             <span class="tag">Python</span>
