@@ -250,15 +250,21 @@
     }
 
     /* PROJECT */
+    a.project-card-link {
+      display: block;
+      text-decoration: none;
+    }
+
     .project-card {
       border: 1px solid var(--border);
       padding: 2rem;
       background: var(--bg2);
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, transform 0.2s;
       display: flex;
       flex-direction: column;
+      cursor: pointer;
     }
-    .project-card:hover { border-color: #aaa; }
+    a.project-card-link:hover .project-card { border-color: #aaa; transform: translateY(-2px); }
 
     .project-content {
       display: flex;
@@ -287,6 +293,13 @@
       line-height: 1.2;
     }
 
+    .project-image {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+    }
+
     .project-card p {
       font-size: 12px;
       color: var(--text-dim);
@@ -306,20 +319,6 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .project-buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: auto;
-      justify-content: space-between;
-    }
-
-    .project-button-left, .project-button-right {
-      display: flex;
-      gap: 0.5rem;
     }
 
     @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -334,7 +333,6 @@
       .project-header { gap: 0.75rem; }
       .project-logo-inline { width: 40px; height: 40px; }
       .project-title { font-size: 16px; }
-      .project-buttons { justify-content: flex-start; }
     }
   </style>
 </head>
@@ -416,34 +414,30 @@
 
     <section id="projects">
       <p class="section-label">Projects</p>
-      <div class="project-card">
-        <div class="project-content">
-          <div class="project-meta">
-            <span class="tag">2026</span>
-            <span class="tag">Group Project</span>
-          </div>
-          <div class="project-header">
-            <img src="logo.png" alt="Movieblendr" class="project-logo-inline" />
-            <div class="project-title">Movieblendr</div>
-          </div>
-          <p>
-            Movie recommendation engine that helps groups find films they'll all enjoy. Analyzes user preferences from Letterboxd data using graph-based algorithms and MovieLens training data.
-          </p>
-          <div class="project-stack">
-            <span class="tag">Python</span>
-            <span class="tag">Java</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">React</span>
-          </div>
-          <div class="project-buttons">
-            <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="btn btn-primary" target="_blank" rel="noopener">Try here</a>
-            <div class="project-button-right">
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn btn-secondary" target="_blank" rel="noopener">Client Repo</a>
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn btn-secondary" target="_blank" rel="noopener">Server Repo</a>
+      <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="project-card-link" target="_blank" rel="noopener">
+        <div class="project-card">
+          <div class="project-content">
+            <div class="project-meta">
+              <span class="tag">2026</span>
+              <span class="tag">Group Project</span>
+            </div>
+            <div class="project-header">
+              <img src="logo.png" alt="Movieblendr" class="project-logo-inline" />
+              <div class="project-title">Movieblendr</div>
+            </div>
+            <img src="UI.png" alt="Movieblendr UI" class="project-image" />
+            <p>
+              Movie recommendation engine that helps groups find films they'll all enjoy. Analyzes user preferences from Letterboxd data using graph-based algorithms and MovieLens training data.
+            </p>
+            <div class="project-stack">
+              <span class="tag">Python</span>
+              <span class="tag">Java</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">React</span>
             </div>
           </div>
         </div>
-      </div>
+      </a>
     </section>
 
   </main>
