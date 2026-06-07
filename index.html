@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,7 +9,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
       --bg: #0a0a0a;
@@ -19,7 +26,9 @@
       --mono: 'IBM Plex Mono', monospace;
     }
 
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       background: var(--bg);
@@ -29,18 +38,23 @@
       line-height: 1.7;
     }
 
-    ::selection { background: #f5f5f5; color: #000; }
+    ::selection {
+      background: #f5f5f5;
+      color: #000;
+    }
 
     nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 0;
+      left: 0;
+      right: 0;
       z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 1rem 3rem;
       border-bottom: 1px solid var(--border);
-      background: rgba(10,10,10,0.95);
+      background: rgba(10, 10, 10, 0.95);
       backdrop-filter: blur(8px);
     }
 
@@ -52,7 +66,12 @@
       letter-spacing: 0.05em;
     }
 
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
     .nav-links a {
       color: var(--text-dim);
       text-decoration: none;
@@ -61,9 +80,16 @@
       text-transform: uppercase;
       transition: color 0.15s;
     }
-    .nav-links a:hover { color: var(--text); }
 
-    main { max-width: 800px; margin: 0 auto; padding: 0 3rem; }
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
 
     /* HERO */
     #hero {
@@ -157,19 +183,31 @@
       transition: border-color 0.15s, color 0.15s, background 0.15s;
       background: transparent;
     }
-    .btn:hover { border-color: var(--text); color: var(--text); }
+
+    .btn:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
 
     .btn-primary {
       border-color: var(--text);
       color: var(--text);
     }
-    .btn-primary:hover { background: var(--text); color: #0a0a0a; }
+
+    .btn-primary:hover {
+      background: var(--text);
+      color: #0a0a0a;
+    }
 
     .btn-secondary {
       border-color: transparent;
       color: var(--text-dim);
     }
-    .btn-secondary:hover { border-color: var(--text); color: var(--text); }
+
+    .btn-secondary:hover {
+      border-color: var(--text);
+      color: var(--text);
+    }
 
     /* INLINE LINKS */
     a.org-link {
@@ -177,13 +215,17 @@
       text-decoration: none;
       transition: color 0.15s, text-decoration 0.15s;
     }
+
     a.org-link:hover {
       color: var(--text);
       text-decoration: underline;
     }
 
     /* SECTIONS */
-    section { padding: 5rem 0; border-top: 1px solid var(--border); }
+    section {
+      padding: 5rem 0;
+      border-top: 1px solid var(--border);
+    }
 
     .section-label {
       font-size: 12px;
@@ -211,7 +253,10 @@
     }
 
     /* TIMELINE */
-    .timeline { display: flex; flex-direction: column; }
+    .timeline {
+      display: flex;
+      flex-direction: column;
+    }
 
     .tl-item {
       display: grid;
@@ -220,7 +265,10 @@
       padding: 1.8rem 0;
       border-bottom: 1px solid var(--border);
     }
-    .tl-item:last-child { border-bottom: none; }
+
+    .tl-item:last-child {
+      border-bottom: none;
+    }
 
     .tl-date {
       font-size: 11px;
@@ -229,13 +277,21 @@
       padding-top: 1px;
     }
 
-    .tl-content ul { list-style: none; padding: 0; margin-top: 0.5rem; }
+    .tl-content ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 0.5rem;
+    }
+
     .tl-content ul li {
       font-size: 12px;
       color: var(--text-dim);
       line-height: 1.8;
     }
-    .tl-content ul li::before { content: '— '; }
+
+    .tl-content ul li::before {
+      content: '— ';
+    }
 
     .badge-upcoming {
       display: inline-block;
@@ -258,7 +314,10 @@
       display: flex;
       flex-direction: column;
     }
-    .project-card:hover { border-color: #aaa; }
+
+    .project-card:hover {
+      border-color: #aaa;
+    }
 
     .project-content {
       display: flex;
@@ -294,19 +353,23 @@
       text-decoration: none;
       position: relative;
     }
+
     a.project-image-link::after {
       content: '';
       position: absolute;
       inset: 0;
-      background:
-        rgba(0,0,0,0.45)
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 88 88' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='4' y='4' width='54' height='54' rx='12' fill='none' stroke='white' stroke-width='6.5'/%3E%3Cpath d='M 40 40 L 40 68 L 47 60 L 54 74 L 60 71 L 53 57 L 64 57 Z' fill='white'/%3E%3C/svg%3E")
-        center / 72px no-repeat;
+      background: rgba(0, 0, 0, 0.45);
       opacity: 0;
       transition: opacity 0.2s;
     }
-    a.project-image-link:hover::after { opacity: 1; }
-    a.project-image-link:hover .project-image { border-color: var(--text); }
+
+    a.project-image-link:hover::after {
+      opacity: 1;
+    }
+
+    a.project-image-link:hover .project-image {
+      border-color: var(--text);
+    }
 
     .project-image {
       width: 100%;
@@ -343,26 +406,66 @@
       justify-content: space-between;
     }
 
-    .project-button-left, .project-button-right {
+    .project-button-left,
+    .project-button-right {
       display: flex;
       gap: 0.5rem;
     }
 
-    @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadein {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
     @media (max-width: 600px) {
-      nav { padding: 0.9rem 1.4rem; }
-      .nav-links { gap: 1.2rem; }
-      main { padding: 0 1.4rem; }
-      h1 { font-size: 2.8rem; }
-      .tl-item { grid-template-columns: 1fr; gap: 0.2rem; }
-      .project-card { flex-direction: column; }
-      .project-header { gap: 0.75rem; }
-      .project-logo-inline { width: 40px; height: 40px; }
-      .project-title { font-size: 16px; }
+      nav {
+        padding: 0.9rem 1.4rem;
+      }
+
+      .nav-links {
+        gap: 1.2rem;
+      }
+
+      main {
+        padding: 0 1.4rem;
+      }
+
+      h1 {
+        font-size: 2.8rem;
+      }
+
+      .tl-item {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+      }
+
+      .project-card {
+        flex-direction: column;
+      }
+
+      .project-header {
+        gap: 0.75rem;
+      }
+
+      .project-logo-inline {
+        width: 40px;
+        height: 40px;
+      }
+
+      .project-title {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <nav>
@@ -379,7 +482,8 @@
 
     <section id="hero">
       <h1>Flynn Diener</h1>
-      <p class="hero-sub">CS Student @ <a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">UZH</a></p>
+      <p class="hero-sub">CS Student @ <a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">UZH</a>
+      </p>
       <div class="hero-links">
         <a href="https://www.linkedin.com/in/flynn-diener/" class="btn" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/fly-die" class="btn" target="_blank" rel="noopener">GitHub</a>
@@ -395,7 +499,8 @@
           <div class="tl-date">2024 – 2027</div>
           <div class="tl-content">
             <h2>BSc Computer Science</h2>
-            <h3><a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">University of Zurich (UZH)</a> – Major: Business Informatics • Minor: Software Systems</h3>
+            <h3><a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">University of Zurich (UZH)</a>
+              – Major: Business Informatics • Minor: Software Systems</h3>
 
           </div>
         </div>
@@ -424,7 +529,8 @@
           <div class="tl-date">Jun – Sep 2026</div>
           <div class="tl-content">
             <h2>Software Engineer Intern</h2>
-            <h3><a href="https://www.hamilton-medical.com/" class="org-link" target="_blank" rel="noopener">Hamilton Medical AG</a> — Bonaduz</h3>
+            <h3><a href="https://www.hamilton-medical.com/" class="org-link" target="_blank" rel="noopener">Hamilton
+                Medical AG</a> — Bonaduz</h3>
           </div>
         </div>
 
@@ -432,7 +538,8 @@
           <div class="tl-date">Apr – Jul 2024</div>
           <div class="tl-content">
             <h2>Research Intern</h2>
-            <h3><a href="https://upgreat.ch" class="org-link" target="_blank" rel="noopener">UPGREAT AG</a> — Fehraltorf</h3>
+            <h3><a href="https://upgreat.ch" class="org-link" target="_blank" rel="noopener">UPGREAT AG</a> — Fehraltorf
+            </h3>
           </div>
         </div>
 
@@ -443,19 +550,21 @@
       <p class="section-label">Projects</p>
       <div class="project-card">
         <div class="project-content">
-          <div class="project-meta">
-            <span class="tag">2026</span>
-            <span class="tag">Group Project</span>
-          </div>
           <div class="project-header">
             <img src="logo.png" alt="Movieblendr" class="project-logo-inline" />
             <div class="project-title">Movieblendr</div>
           </div>
-          <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="project-image-link" target="_blank" rel="noopener">
+          <div class="project-meta">
+            <span class="tag">2026</span>
+            <span class="tag">Group Project</span>
+          </div>
+          <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="project-image-link" target="_blank"
+            rel="noopener">
             <img src="UI.png" alt="Movieblendr UI" class="project-image" />
           </a>
           <p>
-            Movie recommendation engine that helps groups find films they'll all enjoy. Analyzes user preferences from Letterboxd data using graph-based algorithms and MovieLens training data.
+            Movie recommendation engine that helps groups find films they'll all enjoy. Analyzes user preferences from
+            Letterboxd data using graph-based algorithms and MovieLens training data.
           </p>
           <div class="project-stack">
             <span class="tag">Python</span>
@@ -464,10 +573,13 @@
             <span class="tag">React</span>
           </div>
           <div class="project-buttons" style="margin-top: 1.5rem;">
-            <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="btn btn-primary" target="_blank" rel="noopener">Try here</a>
+            <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="btn btn-primary" target="_blank"
+              rel="noopener">Try here</a>
             <div class="project-button-right">
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn btn-secondary" target="_blank" rel="noopener">Client Repo</a>
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn btn-secondary" target="_blank" rel="noopener">Server Repo</a>
+              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn btn-secondary"
+                target="_blank" rel="noopener">Client Repo</a>
+              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn btn-secondary"
+                target="_blank" rel="noopener">Server Repo</a>
             </div>
           </div>
         </div>
@@ -477,4 +589,5 @@
   </main>
 
 </body>
+
 </html>
