@@ -86,6 +86,12 @@
       color: var(--text);
     }
 
+    .nav-links a.active {
+      color: var(--text);
+      border-bottom: 1px solid var(--text);
+      padding-bottom: 2px;
+    }
+
     main {
       max-width: 800px;
       margin: 0 auto;
@@ -235,6 +241,17 @@
     .timeline {
       display: flex;
       flex-direction: column;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(130px + 1rem);
+      width: 1px;
+      background: var(--border);
     }
 
     .tl-item {
@@ -243,10 +260,38 @@
       gap: 2rem;
       padding: 1.8rem 0;
       border-bottom: 1px solid var(--border);
+      position: relative;
     }
 
     .tl-item:last-child {
       border-bottom: none;
+    }
+
+    .tl-content {
+      position: relative;
+    }
+
+    .tl-content::before {
+      content: '';
+      position: absolute;
+      left: calc(-1rem - 5px);
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--text-dim);
+      box-sizing: border-box;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .tl-item:hover .tl-content::before {
+      border-color: var(--text);
+    }
+
+    .tl-item.tl-current .tl-content::before {
+      background: var(--text);
+      border-color: var(--text);
     }
 
     .tl-date {
@@ -397,25 +442,6 @@
       }
     }
 
-    /* CUSTOM CURSOR */
-    @media (pointer: fine) {
-      html, body, * {
-        cursor: none !important;
-      }
-    }
-
-    #cursor {
-      position: fixed;
-      width: 5px;
-      height: 5px;
-      background: var(--text);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 99999;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-    }
-
     /* SCROLL REVEAL */
     .reveal {
       opacity: 0;
@@ -548,6 +574,11 @@
         gap: 0.2rem;
       }
 
+      .timeline::before,
+      .tl-content::before {
+        display: none;
+      }
+
       .project-card {
         flex-direction: column;
       }
@@ -570,7 +601,6 @@
 
 <body>
 
-  <div id="cursor"></div>
   <div id="cmd-hint">⌘K</div>
 
   <div id="palette" hidden>
@@ -614,6 +644,8 @@
         <a href="https://www.linkedin.com/in/flynn-diener/" class="btn" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/fly-die" class="btn" target="_blank" rel="noopener">GitHub</a>
         <a href="mailto:flynn.diener@gmail.com" class="btn">Email</a>
+        <a href="CV_EN_WS.pdf" class="btn" target="_blank" rel="noopener" download>CV (EN)</a>
+        <a href="CV_DE_WS.pdf" class="btn" target="_blank" rel="noopener" download>CV (DE)</a>
       </div>
     </section>
 
@@ -621,7 +653,7 @@
       <p class="section-label reveal">Education</p>
       <div class="timeline">
 
-        <div class="tl-item reveal">
+        <div class="tl-item tl-current reveal">
           <div class="tl-date">2024 – 2027</div>
           <div class="tl-content">
             <h2>BSc Computer Science</h2>
@@ -707,30 +739,25 @@
   </main>
 
   <script>
-    // --- CUSTOM CURSOR ---
-    const cursor = document.getElementById('cursor');
-    let mx = 0, my = 0, cx = 0, cy = 0, cursorActive = false;
+    // --- ACTIVE NAV SECTION ---
+    const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+    const navSections = navLinks
+      .map(a => document.querySelector(a.getAttribute('href')))
+      .filter(Boolean);
 
-    document.addEventListener('mousemove', e => {
-      mx = e.clientX;
-      my = e.clientY;
-      if (!cursorActive) {
-        cx = mx; cy = my;
-        cursor.style.opacity = '1';
-        cursorActive = true;
-      }
-    });
+    const navObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const link = navLinks.find(a => a.getAttribute('href') === `#${entry.target.id}`);
+          if (link) {
+            navLinks.forEach(a => a.classList.remove('active'));
+            link.classList.add('active');
+          }
+        }
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' });
 
-    document.addEventListener('mouseleave', () => cursor.style.opacity = '0');
-    document.addEventListener('mouseenter', () => { if (cursorActive) cursor.style.opacity = '1'; });
-
-    (function tick() {
-      cx += (mx - cx) * 0.15;
-      cy += (my - cy) * 0.15;
-      cursor.style.left = cx + 'px';
-      cursor.style.top = cy + 'px';
-      requestAnimationFrame(tick);
-    })();
+    navSections.forEach(section => navObserver.observe(section));
 
     // --- SCROLL REVEALS ---
     const revealObserver = new IntersectionObserver((entries) => {
