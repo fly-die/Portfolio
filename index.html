@@ -188,26 +188,6 @@
       color: var(--text);
     }
 
-    .btn-primary {
-      border-color: var(--text);
-      color: var(--text);
-    }
-
-    .btn-primary:hover {
-      background: var(--text);
-      color: #0a0a0a;
-    }
-
-    .btn-secondary {
-      border-color: transparent;
-      color: var(--text-dim);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--text);
-      color: var(--text);
-    }
-
     /* INLINE LINKS */
     a.org-link {
       color: var(--text-dim);
@@ -402,13 +382,7 @@
       display: flex;
       gap: 0.5rem;
       flex-wrap: wrap;
-      justify-content: space-between;
-    }
-
-    .project-button-left,
-    .project-button-right {
-      display: flex;
-      gap: 0.5rem;
+      justify-content: flex-start;
     }
 
     @keyframes fadein {
@@ -721,14 +695,10 @@
             <span class="tag">React</span>
           </div>
           <div class="project-buttons" style="margin-top: 1.5rem;">
-            <a href="https://sopra-fs26-group-41-client.vercel.app/login" class="btn btn-primary" target="_blank"
-              rel="noopener">Try here</a>
-            <div class="project-button-right">
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn btn-secondary"
-                target="_blank" rel="noopener">Client Repo</a>
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn btn-secondary"
-                target="_blank" rel="noopener">Server Repo</a>
-            </div>
+            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn"
+              target="_blank" rel="noopener">Client Repo</a>
+            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn"
+              target="_blank" rel="noopener">Server Repo</a>
           </div>
         </div>
       </div>
