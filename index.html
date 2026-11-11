@@ -416,8 +416,19 @@
     }
 
     /* PROJECT */
+    .projects {
+      display: flex;
+      flex-direction: column;
+    }
+
     .project-card {
       display: block;
+    }
+
+    .project-card+.project-card {
+      margin-top: 1.4rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
     }
 
     .project-content {
@@ -821,6 +832,38 @@
 
     <section id="projects">
       <p class="section-label reveal">Projects</p>
+      <div class="projects">
+      <div class="project-card reveal">
+        <div class="project-content">
+          <div class="project-header">
+            <img src="collabitat-logo.svg" alt="Collabitat" class="project-logo-inline" />
+            <div class="project-title">Collabitat</div>
+            <div class="project-buttons">
+              <a href="https://fly-die.github.io/collabitat-web/" class="btn" target="_blank"
+                rel="noopener">Live App</a>
+              <a href="https://github.com/fly-die/collabitat-web" class="btn" target="_blank"
+                rel="noopener">Client Repo</a>
+              <a href="https://github.com/fly-die/collabitat-api" class="btn" target="_blank"
+                rel="noopener">Server Repo</a>
+            </div>
+          </div>
+          <div class="project-meta">
+            <span class="tag">2026</span>
+            <span class="tag">Solo Project</span>
+          </div>
+          <p>
+            Installable web app for flatshares: shared expenses and settling up, rotating chores, and a weekly meal plan
+            whose shopping list turns into a shared expense at checkout.
+          </p>
+          <div class="project-stack">
+            <span class="tag">TypeScript</span>
+            <span class="tag">React</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">PostgreSQL</span>
+            <span class="tag">Docker</span>
+          </div>
+        </div>
+      </div>
       <div class="project-card reveal">
         <div class="project-content">
           <div class="project-header">
@@ -848,6 +891,7 @@
             <span class="tag">React</span>
           </div>
         </div>
+      </div>
       </div>
     </section>
 
