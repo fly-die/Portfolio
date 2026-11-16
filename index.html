@@ -10,6 +10,14 @@
     content="Flynn Diener, Computer Science student at the University of Zurich and working student software engineer at Hamilton Medical." />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#070707" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://flynndiener.ch/" />
+  <meta property="og:title" content="Flynn Diener" />
+  <meta property="og:description" content="CS Student @ UZH" />
+  <meta property="og:image" content="https://flynndiener.ch/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="favicon.ico" sizes="32x32" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -827,8 +835,12 @@
     .hero-side { padding-bottom: 0.6rem; }
     .hero-sub { font-size: 17px; color: var(--text); margin-bottom: 0.9rem; }
 
+    /* the page ends the way it starts: the fog comes back up from below */
+    .outro { position: relative; height: 50vh; min-height: 300px; }
+    .outro .fog { position: absolute; inset: 0; width: 100%; height: 100%; -webkit-mask-image: linear-gradient(transparent, #000 75%); mask-image: linear-gradient(transparent, #000 75%); }
+
     /* sections: the current layout, stretched to the same edges as the hero */
-    main { max-width: none; padding: 0 var(--pad) 6rem; }
+    main { max-width: none; padding: 0 var(--pad) 2rem; }
     section { grid-template-columns: 1fr 2fr; padding: 4rem 0; }
     section:first-child { border-top: none; }
 
@@ -861,7 +873,8 @@
       .hero-side { padding-bottom: 0; }
       .hero-links { gap: 0.6rem 1.3rem; }
       .btn { padding: 0.25rem 0; }        /* bigger tap targets */
-      main { padding: 0 var(--pad) 4rem; }
+      main { padding: 0 var(--pad) 1rem; }
+      .outro { height: 42vh; }
       section { grid-template-columns: 1fr; gap: 1.3rem; padding: 2.6rem 0; }
       .project-content { padding: 1.1rem 1.1rem 1.25rem; }
       .project-buttons { gap: 0.5rem 1.3rem; }
@@ -1073,6 +1086,8 @@
 
   </main>
 
+  <div class="outro" aria-hidden="true"><canvas class="fog" data-fade="2"></canvas></div>
+
   <script>
     // --- THEME ---
     const root = document.documentElement;
@@ -1212,8 +1227,10 @@
         float v = smoothstep(.22, .8, fbm(p * .8 + 2.1 * q + (m - .5) * .25));
         vec3 c = mix(c1, c2, smoothstep(0., .5, v));
         c = mix(c, c3, smoothstep(.45, 1., v));
-        c = mix(c, mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)), fade);   // hero only: calm under the name and the nav
-        float k = mix(1., smoothstep(0., .3, uv.y), fade);         // hero only: tint and grain thin out to the plain page colour
+        float k = 1.;                                               // how much of the fog, tint and grain shows here
+        if (fade > 1.5) k = pow(smoothstep(1., 0., uv.y), 2.4);     // closing fog: eases in very slowly from the plain page colour
+        else if (fade > .5) { c = mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)); k = smoothstep(0., .3, uv.y); } // hero: calm under the name and the nav
+        if (fade > 1.5) c = mix(c1, c, k);
         c *= mix(vec3(1.), vec3(1. + .05 * warm, 1., 1. - .07 * warm), k);
         c += (h(gl_FragCoord.xy + fract(t) * 91.) - .5) * .045 * k; // film grain
         gl_FragColor = vec4(c, 1.);
@@ -1221,6 +1238,7 @@
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const warm = Math.random() * 2 - 1;
     const pointer = [0.5, 0.5];
+    let stirredAt = -1e9;   // switching the theme stirs every fog for a moment
     addEventListener('pointermove', e => { pointer[0] = e.clientX / innerWidth; pointer[1] = 1 - e.clientY / innerHeight; });
 
     document.querySelectorAll('canvas.fog').forEach(canvas => {
@@ -1243,6 +1261,7 @@
         return t;
       };
       const cur = tones(), mouse = [0.5, 0.5], seed = Math.random() * 500, t0 = performance.now();
+      let extra = 0;
       const resize = () => { const d = Math.min(devicePixelRatio || 1, 1.5); canvas.width = canvas.clientWidth * d; canvas.height = canvas.clientHeight * d; gl.viewport(0, 0, canvas.width, canvas.height); };
       resize(); addEventListener('resize', resize);
 
@@ -1252,8 +1271,10 @@
         cur.forEach((c, i) => c.forEach((v, k) => { c[k] = v + (target[i][k] - v) * 0.06; if (Math.abs(target[i][k] - v) > 0.002) moving = true; }));
         mouse[0] += (pointer[0] - mouse[0]) * 0.03; mouse[1] += (pointer[1] - mouse[1]) * 0.03;
         gl.uniform2f(U('r'), canvas.width, canvas.height); gl.uniform2f(U('m'), mouse[0], mouse[1]);
-        gl.uniform1f(U('t'), seed + (still ? 0 : (now - t0) / 1000));
-        gl.uniform1f(U('warm'), warm); gl.uniform1f(U('fade'), canvas.dataset.fade ? 1 : 0);
+        const stir = Math.max(0, 1 - (now - stirredAt) / 1600);
+        if (!still) extra += stir * stir * 0.45;
+        gl.uniform1f(U('t'), seed + extra + (still ? 0 : (now - t0) / 1000));
+        gl.uniform1f(U('warm'), warm); gl.uniform1f(U('fade'), +canvas.dataset.fade || 0);
         ['c1', 'c2', 'c3'].forEach((n, i) => gl.uniform3fv(U(n), cur[i]));
         gl.drawArrays(gl.TRIANGLES, 0, 3);
         running = visible && shown && (!still || moving);
@@ -1261,7 +1282,7 @@
       }
       const kick = () => { if (!running) { running = true; requestAnimationFrame(frame); } };
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) kick(); }, { rootMargin: '100px' }).observe(canvas);
-      new MutationObserver(kick).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+      new MutationObserver(() => { stirredAt = performance.now(); kick(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
       if (canvas.id === 'hero-fog') {
         // gone by the time you are a bit over half a screen down
         const dissolve = () => {
