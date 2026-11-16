@@ -1268,7 +1268,10 @@
       let visible = true, shown = true, running = false;
       function frame(now) {
         const target = tones(); let moving = false;
-        cur.forEach((c, i) => c.forEach((v, k) => { c[k] = v + (target[i][k] - v) * 0.06; if (Math.abs(target[i][k] - v) > 0.002) moving = true; }));
+        // the base tone follows the page colour at once, so the fog never shows its edges while the theme changes;
+        // only the mid and far tones drift over
+        cur[0] = target[0];
+        cur.forEach((c, i) => i && c.forEach((v, k) => { c[k] = v + (target[i][k] - v) * 0.06; if (Math.abs(target[i][k] - v) > 0.002) moving = true; }));
         mouse[0] += (pointer[0] - mouse[0]) * 0.03; mouse[1] += (pointer[1] - mouse[1]) * 0.03;
         gl.uniform2f(U('r'), canvas.width, canvas.height); gl.uniform2f(U('m'), mouse[0], mouse[1]);
         const stir = Math.max(0, 1 - (now - stirredAt) / 1600);
