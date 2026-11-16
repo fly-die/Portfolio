@@ -9,7 +9,7 @@
   <meta name="description"
     content="Flynn Diener, Computer Science student at the University of Zurich and working student software engineer at Hamilton Medical." />
   <meta name="color-scheme" content="dark light" />
-  <meta name="theme-color" content="#0b0b0b" />
+  <meta name="theme-color" content="#070707" />
   <link rel="icon" href="favicon.ico" sizes="32x32" />
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
@@ -798,12 +798,82 @@
         display: none;
       }
     }
+
+    /* ============ FOG ============ */
+    :root {
+      --bg: #070707; --bg2: #0e0e0d; --border: #23221f; --text: #e9e5dc; --text-dim: #8d897f; --text-faint: #56534c;
+      --rail: #3a3833; --nav-bg: rgba(7, 7, 7, 0.72); --palette-border: #2c2b27; --palette-active: #1c1b19;
+      --pad: 2.5rem;
+    }
+
+    [data-theme="light"] {
+      --bg: #e7e3da; --bg2: #efece5; --border: #cfcabe; --text: #181715; --text-dim: #6f6b62; --text-faint: #a39e92;
+      --rail: #bdb7aa; --nav-bg: rgba(231, 227, 218, 0.75); --palette-border: #cfcabe; --palette-active: #e2ded4;
+    }
+
+    nav { padding: 1.1rem var(--pad); background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; transition: border-color 0.2s, background 0.3s; }
+    nav.scrolled { background: var(--nav-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+
+    /* hero: full first screen, light above, name and links resting at the bottom */
+    #hero {
+      position: relative; display: flex; align-items: flex-end; animation: fadein 1.2s ease both;
+      height: 100vh; height: 100svh; min-height: 520px; padding: 0 var(--pad) var(--pad);
+    }
+    #hero .fog { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .hero-inner { position: relative; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem 4rem; flex-wrap: wrap; }
+    h1 { font-weight: 400; font-size: clamp(3.4rem, 8.2vw, 7.6rem); line-height: 0.92; letter-spacing: -0.05em; margin: 0 0 0 -0.04em; }
+    .hero-side { padding-bottom: 0.6rem; }
+    .hero-sub { font-size: 17px; color: var(--text); margin-bottom: 0.9rem; }
+
+    /* sections: the current layout, stretched to the same edges as the hero */
+    main { max-width: none; padding: 0 var(--pad) 6rem; }
+    section { grid-template-columns: 1fr 2fr; padding: 4rem 0; }
+    section:first-child { border-top: none; }
+
+    /* projects: two plates, each with its own slow light tinted in the project's colour */
+    .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .project-card { border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: var(--bg2); transition: opacity 0.9s cubic-bezier(0.25, 0.1, 0.25, 1), border-color 0.3s; }
+    .project-card:hover { border-color: var(--rail); }
+    .project-card + .project-card { margin-top: 0; padding-top: 0; border-top: 1px solid var(--border); }
+    .project-card + .project-card:hover { border-color: var(--rail); }
+    .cover { display: block; width: 100%; aspect-ratio: 16 / 8; }
+    .cover-link { display: block; overflow: hidden; }
+    .cover-link .cover { transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1); }
+    .cover-link:hover .cover { transform: scale(1.04); }
+    .cover-link:focus-visible { outline: 1px solid var(--text); outline-offset: -4px; }
+    .project-content { padding: 1.3rem 1.5rem 1.5rem; height: 100%; }
+    .project-card p { max-width: none; }
+    .project-buttons { margin: 1.3rem 0 0; padding-top: 1rem; border-top: 1px solid var(--border); }
+
+    @media (max-width: 1100px) {
+      .projects { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      :root { --pad: 1.1rem; }
+      nav { padding: 0.9rem var(--pad); }
+      .nav-right { gap: 1.1rem; }
+      #hero { padding: 0 var(--pad) 1.6rem; }
+      .hero-inner { gap: 1.4rem; }
+      /* phones: the name goes on one line */
+      h1 { font-size: min(15.2vw, 5.2rem); white-space: nowrap; }
+      h1 br { display: none; }
+      .hero-side { padding-bottom: 0; }
+      .hero-links { gap: 0.6rem 1.3rem; }
+      .btn { padding: 0.25rem 0; }        /* bigger tap targets */
+      main { padding: 0 var(--pad) 4rem; }
+      section { grid-template-columns: 1fr; gap: 1.3rem; padding: 2.6rem 0; }
+      .project-content { padding: 1.1rem 1.1rem 1.25rem; }
+      .project-buttons { gap: 0.5rem 1.3rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      #hero { animation: none; }
+    }
   </style>
 </head>
 
 <body>
-
-  <div id="cmd-hint">⌘K</div>
 
   <div id="palette" hidden>
     <div id="palette-backdrop"></div>
@@ -847,20 +917,24 @@
     </div>
   </nav>
 
-  <main>
-
-    <section id="hero">
-      <h1>Flynn Diener</h1>
-      <p class="hero-sub">CS Student @ <a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">UZH</a>
-      </p>
-      <div class="hero-links">
-        <a href="https://www.linkedin.com/in/flynn-diener/" class="btn" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://github.com/fly-die" class="btn" target="_blank" rel="noopener">GitHub</a>
-        <a href="mailto:flynn.diener@gmail.com" class="btn">Email</a>
-        <a href="CV_EN_WS.pdf" class="btn" target="_blank" rel="noopener" download>CV (EN)</a>
-        <a href="CV_DE_WS.pdf" class="btn" target="_blank" rel="noopener" download>CV (DE)</a>
+  <header id="hero">
+    <canvas class="fog" data-fade="1" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <h1>Flynn<br> Diener</h1>
+      <div class="hero-side">
+        <p class="hero-sub">CS Student @ <a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">UZH</a></p>
+        <div class="hero-links">
+          <a href="https://www.linkedin.com/in/flynn-diener/" class="btn" target="_blank" rel="noopener">LinkedIn</a>
+          <a href="https://github.com/fly-die" class="btn" target="_blank" rel="noopener">GitHub</a>
+          <a href="mailto:flynn.diener@gmail.com" class="btn">Email</a>
+          <a href="CV_EN_WS.pdf" class="btn" target="_blank" rel="noopener" download>CV (EN)</a>
+          <a href="CV_DE_WS.pdf" class="btn" target="_blank" rel="noopener" download>CV (DE)</a>
+        </div>
       </div>
-    </section>
+    </div>
+  </header>
+
+  <main>
 
     <section id="education">
       <p class="section-label reveal">Education</p>
@@ -931,18 +1005,13 @@
       <p class="section-label reveal">Projects</p>
       <div class="projects">
       <div class="project-card reveal">
+        <a class="cover-link" href="https://fly-die.github.io/collabitat-web/" target="_blank" rel="noopener" aria-label="Open the Collabitat live app">
+          <canvas class="fog cover" data-tint="#1E4D3B" aria-hidden="true"></canvas>
+        </a>
         <div class="project-content">
           <div class="project-header">
             <img src="collabitat-logo.svg" alt="Collabitat" class="project-logo-inline" />
             <div class="project-title">Collabitat</div>
-            <div class="project-buttons">
-              <a href="https://fly-die.github.io/collabitat-web/" class="btn" target="_blank"
-                rel="noopener">Live App</a>
-              <a href="https://github.com/fly-die/collabitat-web" class="btn" target="_blank"
-                rel="noopener">Client Repo</a>
-              <a href="https://github.com/fly-die/collabitat-api" class="btn" target="_blank"
-                rel="noopener">Server Repo</a>
-            </div>
           </div>
           <div class="project-meta">
             <span class="tag">2026</span>
@@ -959,19 +1028,22 @@
             <span class="tag">PostgreSQL</span>
             <span class="tag">Docker</span>
           </div>
+          <div class="project-buttons">
+            <a href="https://fly-die.github.io/collabitat-web/" class="btn" target="_blank"
+              rel="noopener">Live App</a>
+            <a href="https://github.com/fly-die/collabitat-web" class="btn" target="_blank"
+              rel="noopener">Client Repo</a>
+            <a href="https://github.com/fly-die/collabitat-api" class="btn" target="_blank"
+              rel="noopener">Server Repo</a>
+          </div>
         </div>
       </div>
       <div class="project-card reveal">
+        <canvas class="fog cover" data-tint="#9c2f27" aria-hidden="true"></canvas>
         <div class="project-content">
           <div class="project-header">
             <img src="logo.png" alt="Movieblendr" class="project-logo-inline" />
             <div class="project-title">Movieblendr</div>
-            <div class="project-buttons">
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn" target="_blank"
-                rel="noopener">Client Repo</a>
-              <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn" target="_blank"
-                rel="noopener">Server Repo</a>
-            </div>
           </div>
           <div class="project-meta">
             <span class="tag">2026</span>
@@ -986,6 +1058,12 @@
             <span class="tag">Java</span>
             <span class="tag">JavaScript</span>
             <span class="tag">React</span>
+          </div>
+          <div class="project-buttons">
+            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn" target="_blank"
+              rel="noopener">Client Repo</a>
+            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn" target="_blank"
+              rel="noopener">Server Repo</a>
           </div>
         </div>
       </div>
@@ -1003,7 +1081,7 @@
     function syncThemeUI() {
       const dark = root.dataset.theme === 'dark';
       themeToggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-      themeColor.content = dark ? '#0b0b0b' : '#fafaf9';
+      themeColor.content = dark ? '#070707' : '#e7e3da';
     }
 
     function toggleTheme() {
@@ -1066,11 +1144,9 @@
 
     // --- COMMAND PALETTE ---
     const palette = document.getElementById('palette');
-    const cmdHint = document.getElementById('cmd-hint');
     const actionItems = [...document.querySelectorAll('#palette-list li[data-action]')];
     let activeIdx = 0;
 
-    setTimeout(() => cmdHint.style.opacity = '0', 3500);
 
     function openPalette() {
       palette.hidden = false;
@@ -1117,6 +1193,73 @@
     actionItems.forEach((li, i) => {
       li.addEventListener('mouseenter', () => setActive(i));
       li.addEventListener('click', () => runItem(li));
+    });
+    // --- FOG ---
+    // One small shader, used for the hero and for each project cover. It only runs while it is on screen.
+    const TONES = { dark: ['#070707', '#3b3936', '#d9d3c5'], light: ['#e7e3da', '#bcb6a9', '#4f4c46'] };
+    const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+    const FOG_FS = `precision highp float;
+      uniform vec2 r, m; uniform float t, warm, fade; uniform vec3 c1, c2, c3;
+      float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * f * (f * (f * 6. - 15.) + 10.);
+        return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
+      float fbm(vec2 p) { return n(p) * .62 + n(p * 1.9 + 3.1) * .28 + n(p * 3.7 + 8.) * .1; }
+      void main() {
+        vec2 uv = gl_FragCoord.xy / r, p = vec2(uv.x * r.x / r.y, uv.y) * .85;
+        vec2 q = vec2(fbm(p + t * .028), fbm(p + 4.7 - t * .022));
+        float v = smoothstep(.22, .8, fbm(p * .8 + 2.1 * q + (m - .5) * .25));
+        vec3 c = mix(c1, c2, smoothstep(0., .5, v));
+        c = mix(c, c3, smoothstep(.45, 1., v));
+        c = mix(c, mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)), fade);   // hero only: calm under the name and the nav
+        c *= vec3(1. + .05 * warm, 1., 1. - .07 * warm);
+        c += (h(gl_FragCoord.xy + fract(t) * 91.) - .5) * .045;    // film grain
+        gl_FragColor = vec4(c, 1.);
+      }`;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const warm = Math.random() * 2 - 1;
+    const pointer = [0.5, 0.5];
+    addEventListener('pointermove', e => { pointer[0] = e.clientX / innerWidth; pointer[1] = 1 - e.clientY / innerHeight; });
+
+    document.querySelectorAll('canvas.fog').forEach(canvas => {
+      const gl = canvas.getContext('webgl', { antialias: false });
+      if (!gl) return;
+      const sh = (type, src) => { const x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; };
+      const prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, 'attribute vec2 a; void main() { gl_Position = vec4(a, 0., 1.); }'));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FOG_FS)); gl.linkProgram(prog); gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+      const U = n => gl.getUniformLocation(prog, n);
+
+      const tint = canvas.dataset.tint ? hex(canvas.dataset.tint) : null;
+      const tones = () => {
+        const t = TONES[root.dataset.theme].map(hex);
+        // a project cover lets its own colour into the mid and far tones
+        if (tint) { t[1] = t[1].map((v, i) => v * 0.45 + tint[i] * 0.55); t[2] = t[2].map((v, i) => v * 0.82 + tint[i] * 0.18); }
+        return t;
+      };
+      const cur = tones(), mouse = [0.5, 0.5], seed = Math.random() * 500, t0 = performance.now();
+      const resize = () => { const d = Math.min(devicePixelRatio || 1, 1.5); canvas.width = canvas.clientWidth * d; canvas.height = canvas.clientHeight * d; gl.viewport(0, 0, canvas.width, canvas.height); };
+      resize(); addEventListener('resize', resize);
+
+      let visible = true, running = false;
+      function frame(now) {
+        const target = tones(); let moving = false;
+        cur.forEach((c, i) => c.forEach((v, k) => { c[k] = v + (target[i][k] - v) * 0.06; if (Math.abs(target[i][k] - v) > 0.002) moving = true; }));
+        mouse[0] += (pointer[0] - mouse[0]) * 0.03; mouse[1] += (pointer[1] - mouse[1]) * 0.03;
+        gl.uniform2f(U('r'), canvas.width, canvas.height); gl.uniform2f(U('m'), mouse[0], mouse[1]);
+        gl.uniform1f(U('t'), seed + (still ? 0 : (now - t0) / 1000));
+        gl.uniform1f(U('warm'), warm); gl.uniform1f(U('fade'), canvas.dataset.fade ? 1 : 0);
+        ['c1', 'c2', 'c3'].forEach((n, i) => gl.uniform3fv(U(n), cur[i]));
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        running = visible && (!still || moving);
+        if (running) requestAnimationFrame(frame);
+      }
+      const kick = () => { if (!running) { running = true; requestAnimationFrame(frame); } };
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) kick(); }, { rootMargin: '100px' }).observe(canvas);
+      new MutationObserver(kick).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+      kick();
     });
   </script>
 
