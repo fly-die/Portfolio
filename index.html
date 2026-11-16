@@ -836,8 +836,8 @@
     .hero-sub { font-size: 17px; color: var(--text); margin-bottom: 0.9rem; }
 
     /* the page ends the way it starts: the fog comes back up from below */
-    .outro { position: relative; height: 50vh; min-height: 300px; }
-    .outro .fog { position: absolute; inset: 0; width: 100%; height: 100%; -webkit-mask-image: linear-gradient(transparent, #000 75%); mask-image: linear-gradient(transparent, #000 75%); }
+    .outro { position: relative; height: 62vh; min-height: 340px; }
+    .outro .fog { position: absolute; inset: 0; width: 100%; height: 100%; }
 
     /* sections: the current layout, stretched to the same edges as the hero */
     main { max-width: none; padding: 0 var(--pad) 2rem; }
@@ -874,7 +874,7 @@
       .hero-links { gap: 0.6rem 1.3rem; }
       .btn { padding: 0.25rem 0; }        /* bigger tap targets */
       main { padding: 0 var(--pad) 1rem; }
-      .outro { height: 42vh; }
+      .outro { height: 52vh; }
       section { grid-template-columns: 1fr; gap: 1.3rem; padding: 2.6rem 0; }
       .project-content { padding: 1.1rem 1.1rem 1.25rem; }
       .project-buttons { gap: 0.5rem 1.3rem; }
@@ -1228,7 +1228,7 @@
         vec3 c = mix(c1, c2, smoothstep(0., .5, v));
         c = mix(c, c3, smoothstep(.45, 1., v));
         float k = 1.;                                               // how much of the fog, tint and grain shows here
-        if (fade > 1.5) k = pow(smoothstep(1., 0., uv.y), 2.4);     // closing fog: eases in very slowly from the plain page colour
+        if (fade > 1.5) k = pow(smoothstep(1., .3, uv.y), 2.2) * smoothstep(0., .34, uv.y); // closing fog: eases in from the plain page colour and back out before the page ends
         else if (fade > .5) { c = mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)); k = smoothstep(0., .3, uv.y); } // hero: calm under the name and the nav
         if (fade > 1.5) c = mix(c1, c, k);
         c *= mix(vec3(1.), vec3(1. + .05 * warm, 1., 1. - .07 * warm), k);
