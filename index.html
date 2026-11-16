@@ -819,7 +819,8 @@
       position: relative; display: flex; align-items: flex-end; animation: fadein 1.2s ease both;
       height: 100vh; height: 100svh; min-height: 520px; padding: 0 var(--pad) var(--pad);
     }
-    #hero .fog { position: absolute; inset: 0; width: 100%; height: 100%; }
+    /* the hero fog is pinned behind the page and dissolves as you scroll, so it never ends in an edge */
+    #hero-fog { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; z-index: -1; animation: fadein 1.2s ease backwards; }
     .hero-inner { position: relative; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem 4rem; flex-wrap: wrap; }
     h1 { font-weight: 400; font-size: clamp(3.4rem, 8.2vw, 7.6rem); line-height: 0.92; letter-spacing: -0.05em; margin: 0 0 0 -0.04em; }
     .hero-side { padding-bottom: 0.6rem; }
@@ -917,8 +918,9 @@
     </div>
   </nav>
 
+  <canvas class="fog" id="hero-fog" data-fade="1" aria-hidden="true"></canvas>
+
   <header id="hero">
-    <canvas class="fog" data-fade="1" aria-hidden="true"></canvas>
     <div class="hero-inner">
       <h1>Flynn<br> Diener</h1>
       <div class="hero-side">
@@ -1106,7 +1108,8 @@
 
     // --- NAV BORDER ON SCROLL ---
     const nav = document.querySelector('nav');
-    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+    // the nav only gets its own background once the fog behind it has mostly dissolved
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > window.innerHeight * 0.45);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -1211,8 +1214,9 @@
         vec3 c = mix(c1, c2, smoothstep(0., .5, v));
         c = mix(c, c3, smoothstep(.45, 1., v));
         c = mix(c, mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)), fade);   // hero only: calm under the name and the nav
-        c *= vec3(1. + .05 * warm, 1., 1. - .07 * warm);
-        c += (h(gl_FragCoord.xy + fract(t) * 91.) - .5) * .045;    // film grain
+        float k = mix(1., smoothstep(0., .3, uv.y), fade);         // hero only: tint and grain thin out to the plain page colour
+        c *= mix(vec3(1.), vec3(1. + .05 * warm, 1., 1. - .07 * warm), k);
+        c += (h(gl_FragCoord.xy + fract(t) * 91.) - .5) * .045 * k; // film grain
         gl_FragColor = vec4(c, 1.);
       }`;
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1243,7 +1247,7 @@
       const resize = () => { const d = Math.min(devicePixelRatio || 1, 1.5); canvas.width = canvas.clientWidth * d; canvas.height = canvas.clientHeight * d; gl.viewport(0, 0, canvas.width, canvas.height); };
       resize(); addEventListener('resize', resize);
 
-      let visible = true, running = false;
+      let visible = true, shown = true, running = false;
       function frame(now) {
         const target = tones(); let moving = false;
         cur.forEach((c, i) => c.forEach((v, k) => { c[k] = v + (target[i][k] - v) * 0.06; if (Math.abs(target[i][k] - v) > 0.002) moving = true; }));
@@ -1253,12 +1257,20 @@
         gl.uniform1f(U('warm'), warm); gl.uniform1f(U('fade'), canvas.dataset.fade ? 1 : 0);
         ['c1', 'c2', 'c3'].forEach((n, i) => gl.uniform3fv(U(n), cur[i]));
         gl.drawArrays(gl.TRIANGLES, 0, 3);
-        running = visible && (!still || moving);
+        running = visible && shown && (!still || moving);
         if (running) requestAnimationFrame(frame);
       }
       const kick = () => { if (!running) { running = true; requestAnimationFrame(frame); } };
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) kick(); }, { rootMargin: '100px' }).observe(canvas);
       new MutationObserver(kick).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+      if (canvas.id === 'hero-fog') {
+        // gone by the time you are a bit over half a screen down
+        const dissolve = () => {
+          const o = Math.pow(Math.max(0, 1 - scrollY / (innerHeight * 0.65)), 1.5);
+          canvas.style.opacity = o; shown = o > 0; if (shown) kick();
+        };
+        dissolve(); addEventListener('scroll', dissolve, { passive: true }); addEventListener('resize', dissolve);
+      }
       kick();
     });
   </script>
