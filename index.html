@@ -823,6 +823,7 @@
     #hero-fog { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; z-index: -1; animation: fadein 1.2s ease backwards; }
     .hero-inner { position: relative; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem 4rem; flex-wrap: wrap; }
     h1 { font-weight: 400; font-size: clamp(3.4rem, 8.2vw, 7.6rem); line-height: 0.92; letter-spacing: -0.05em; margin: 0 0 0 -0.04em; }
+    h1 { white-space: nowrap; }
     .hero-side { padding-bottom: 0.6rem; }
     .hero-sub { font-size: 17px; color: var(--text); margin-bottom: 0.9rem; }
 
@@ -856,9 +857,7 @@
       .nav-right { gap: 1.1rem; }
       #hero { padding: 0 var(--pad) 1.6rem; }
       .hero-inner { gap: 1.4rem; }
-      /* phones: the name goes on one line */
-      h1 { font-size: min(15.2vw, 5.2rem); white-space: nowrap; }
-      h1 br { display: none; }
+      h1 { font-size: min(15.2vw, 5.2rem); }
       .hero-side { padding-bottom: 0; }
       .hero-links { gap: 0.6rem 1.3rem; }
       .btn { padding: 0.25rem 0; }        /* bigger tap targets */
@@ -922,7 +921,7 @@
 
   <header id="hero">
     <div class="hero-inner">
-      <h1>Flynn<br> Diener</h1>
+      <h1>Flynn Diener</h1>
       <div class="hero-side">
         <p class="hero-sub">CS Student @ <a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">UZH</a></p>
         <div class="hero-links">
