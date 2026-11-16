@@ -806,8 +806,8 @@
     }
 
     [data-theme="light"] {
-      --bg: #e7e3da; --bg2: #efece5; --border: #cfcabe; --text: #181715; --text-dim: #6f6b62; --text-faint: #a39e92;
-      --rail: #bdb7aa; --nav-bg: rgba(231, 227, 218, 0.75); --palette-border: #cfcabe; --palette-active: #e2ded4;
+      --bg: #e9e4d7; --bg2: #f1ede3; --border: #cfcabe; --text: #181715; --text-dim: #6f6b62; --text-faint: #a39e92;
+      --rail: #bdb7aa; --nav-bg: rgba(233, 228, 215, 0.75); --palette-border: #cfcabe; --palette-active: #e2ded4;
     }
 
     nav { padding: 1.1rem var(--pad); background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; transition: border-color 0.2s, background 0.3s; }
@@ -1088,7 +1088,7 @@
     function syncThemeUI() {
       const dark = root.dataset.theme === 'dark';
       themeToggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
-      themeColor.content = dark ? '#070707' : '#e7e3da';
+      themeColor.content = dark ? '#070707' : '#e9e4d7';
     }
 
     function toggleTheme() {
@@ -1205,7 +1205,7 @@
     });
     // --- FOG ---
     // One small shader, used for the hero and for each project cover. It only runs while it is on screen.
-    const TONES = { dark: ['#070707', '#3b3936', '#d9d3c5'], light: ['#e7e3da', '#bcb6a9', '#4f4c46'] };
+    const TONES = { dark: ['#070707', '#3b3936', '#d9d3c5'], light: ['#e9e4d7', '#bcb6a9', '#4f4c46'] };
     const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
     const FOG_FS = `precision highp float;
       uniform vec2 r, m; uniform float t, warm, fade; uniform vec3 c1, c2, c3;
