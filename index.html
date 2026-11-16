@@ -828,7 +828,7 @@
       height: 100vh; height: 100svh; min-height: 520px; padding: 0 var(--pad) var(--pad);
     }
     /* the hero fog is pinned behind the page and dissolves as you scroll, so it never ends in an edge */
-    #hero-fog { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; z-index: -1; opacity: 0; transition: opacity 1.2s ease; }
+    #hero-fog { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; z-index: -1; opacity: 0; }
     .hero-inner { position: relative; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem 4rem; flex-wrap: wrap; }
     h1 { font-weight: 400; font-size: clamp(3.4rem, 8.2vw, 7.6rem); line-height: 0.92; letter-spacing: -0.05em; margin: 0 0 0 -0.04em; }
     h1 { white-space: nowrap; }
@@ -1288,14 +1288,24 @@
       new MutationObserver(() => { stirredAt = performance.now(); kick(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
       if (canvas.id === 'hero-fog') {
         // gone by the time you are a bit over half a screen down
+        let intro = 0;   // 0 to 1: the fade-in after the page has loaded
         const dissolve = () => {
-          const o = Math.pow(Math.max(0, 1 - scrollY / (innerHeight * 0.65)), 1.5);
+          const o = Math.pow(Math.max(0, 1 - scrollY / (innerHeight * 0.65)), 1.5) * intro;
           canvas.style.opacity = o; shown = o > 0; if (shown) kick();
         };
         addEventListener('scroll', dissolve, { passive: true }); addEventListener('resize', dissolve);
         // The fog starts hidden and fades in once the page has loaded. On a reload the browser first puts you back
         // where you were scrolled to, so waiting avoids the fog flashing behind the sections further down.
-        const start = () => setTimeout(() => { dissolve(); setTimeout(() => canvas.style.transition = 'none', 1300); }, 80);
+        // The fade-in only scales the scroll value, so scrolling during it still dissolves the fog in step.
+        const start = () => setTimeout(() => {
+          const t0 = performance.now();
+          (function rise(now) {
+            const p = Math.min(1, (now - t0) / 1200);
+            intro = still ? 1 : 1 - Math.pow(1 - p, 3);
+            dissolve();
+            if (intro < 1) requestAnimationFrame(rise);
+          })(t0);
+        }, 80);
         document.readyState === 'complete' ? start() : addEventListener('load', start);
       }
       kick();
