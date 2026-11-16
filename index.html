@@ -8,8 +8,20 @@
   <title>Flynn Diener</title>
   <meta name="description"
     content="Flynn Diener, Computer Science student at the University of Zurich and working student software engineer at Hamilton Medical." />
-  <link rel="icon" type="image/svg+xml"
-    href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%230a0a0a'/%3E%3Ctext x='16' y='21.5' text-anchor='middle' font-family='IBM Plex Mono,ui-monospace,Menlo,Consolas,monospace' font-size='14' font-weight='700' fill='%23f5f5f5'%3EFD%3C/text%3E%3C/svg%3E" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0b0b0b" />
+  <link rel="icon" href="favicon.ico" sizes="32x32" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <script>
+    // Apply the saved or system theme before first paint, so the page never flashes the wrong colours
+    (function () {
+      var t;
+      try { t = localStorage.getItem('theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -31,11 +43,32 @@
       --text: #ececec;
       --text-dim: #9a9a9a;
       --text-faint: #5a5a5a;
+      --rail: #333;
+      --nav-bg: rgba(11, 11, 11, 0.8);
+      --palette-border: #2a2a2a;
+      --palette-active: #1d1d1d;
+      --backdrop: rgba(0, 0, 0, 0.6);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
       --sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
       --mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
       --measure: 720px;
       --gutter: 1.5rem;
       --label-col: 150px;
+    }
+
+    [data-theme="light"] {
+      --bg: #fafaf9;
+      --bg2: #ffffff;
+      --border: #e7e7e5;
+      --text: #111111;
+      --text-dim: #5e5e5c;
+      --text-faint: #a3a3a0;
+      --rail: #d4d4d1;
+      --nav-bg: rgba(250, 250, 249, 0.8);
+      --palette-border: #e2e2df;
+      --palette-active: #f1f1ef;
+      --backdrop: rgba(0, 0, 0, 0.18);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.12);
     }
 
     html {
@@ -75,7 +108,7 @@
       justify-content: space-between;
       padding: 1.1rem 3rem;
       border-bottom: 1px solid transparent;
-      background: rgba(11, 11, 11, 0.8);
+      background: var(--nav-bg);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       transition: border-color 0.2s;
@@ -110,6 +143,45 @@
     .nav-links a:hover,
     .nav-links a.active {
       color: var(--text);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.6rem;
+    }
+
+    .theme-toggle {
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      margin: -6px -6px -6px 0;
+      background: none;
+      border: 0;
+      border-radius: 6px;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: color 0.15s;
+    }
+
+    .theme-toggle:hover {
+      color: var(--text);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 1px solid var(--text);
+      outline-offset: 1px;
+    }
+
+    .theme-toggle svg {
+      width: 15px;
+      height: 15px;
+      transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    [data-theme="light"] .theme-toggle svg {
+      transform: rotate(180deg);
     }
 
     main {
@@ -366,7 +438,7 @@
       top: 0.55rem;
       bottom: 0.55rem;
       width: 1px;
-      background: #333;
+      background: var(--rail);
     }
 
     .tl-role {
@@ -495,9 +567,24 @@
       opacity: 1;
     }
 
+    /* Theme switch: a short crossfade of the whole page where the browser supports it */
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.3s;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       html {
         scroll-behavior: auto;
+      }
+
+      .theme-toggle svg {
+        transition: none;
+      }
+
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none;
       }
 
       #hero,
@@ -526,7 +613,7 @@
     #palette-backdrop {
       position: absolute;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: var(--backdrop);
       backdrop-filter: blur(2px);
       -webkit-backdrop-filter: blur(2px);
     }
@@ -536,10 +623,10 @@
       width: 420px;
       max-width: calc(100vw - 2rem);
       background: var(--bg2);
-      border: 1px solid #2a2a2a;
+      border: 1px solid var(--palette-border);
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+      box-shadow: var(--shadow);
       z-index: 1;
     }
 
@@ -575,7 +662,7 @@
     }
 
     #palette-list li.active {
-      background: #1d1d1d;
+      background: var(--palette-active);
       color: var(--text);
     }
 
@@ -736,18 +823,28 @@
         <li data-action="url" data-target="https://www.linkedin.com/in/flynn-diener/">LinkedIn <span
             class="palette-key">↗</span></li>
         <li data-action="copy" data-target="flynn.diener@gmail.com">Copy Email</li>
+        <li class="palette-divider">settings</li>
+        <li data-action="theme">Toggle Theme <span class="palette-key">T</span></li>
       </ul>
     </div>
   </div>
 
   <nav>
     <a href="#hero" class="nav-logo">FD</a>
-    <ul class="nav-links">
-      <li><a href="#education">Edu</a></li>
-      <li><a href="#languages">Lang</a></li>
-      <li><a href="#experience">Exp</a></li>
-      <li><a href="#projects">Proj</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#education">Edu</a></li>
+        <li><a href="#languages">Lang</a></li>
+        <li><a href="#experience">Exp</a></li>
+        <li><a href="#projects">Proj</a></li>
+      </ul>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode">
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.3" />
+          <path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor" />
+        </svg>
+      </button>
+    </div>
   </nav>
 
   <main>
@@ -898,6 +995,37 @@
   </main>
 
   <script>
+    // --- THEME ---
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+
+    function syncThemeUI() {
+      const dark = root.dataset.theme === 'dark';
+      themeToggle.setAttribute('aria-label', dark ? 'Switch to light mode' : 'Switch to dark mode');
+      themeColor.content = dark ? '#0b0b0b' : '#fafaf9';
+    }
+
+    function toggleTheme() {
+      const apply = () => {
+        root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        try { localStorage.setItem('theme', root.dataset.theme); } catch (e) { }
+        syncThemeUI();
+      };
+      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.startViewTransition && !reduce ? document.startViewTransition(apply) : apply();
+    }
+
+    syncThemeUI();
+    themeToggle.addEventListener('click', toggleTheme);
+
+    // Follow the system setting live, until the visitor picks a theme themselves
+    matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+      let saved = null;
+      try { saved = localStorage.getItem('theme'); } catch (err) { }
+      if (!saved) { root.dataset.theme = e.matches ? 'light' : 'dark'; syncThemeUI(); }
+    });
+
     // --- NAV BORDER ON SCROLL ---
     const nav = document.querySelector('nav');
     const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
@@ -967,12 +1095,16 @@
       if (action === 'section') document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
       else if (action === 'url') window.open(target, '_blank', 'noopener');
       else if (action === 'copy') navigator.clipboard.writeText(target).catch(() => { });
+      else if (action === 'theme') toggleTheme();
     }
 
     document.addEventListener('keydown', e => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
         palette.hidden ? openPalette() : closePalette();
+      } else if (palette.hidden && e.key.toLowerCase() === 't' && !e.metaKey && !e.ctrlKey && !e.altKey
+        && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
+        toggleTheme();
       } else if (!palette.hidden) {
         if (e.key === 'Escape') closePalette();
         else if (e.key === 'ArrowDown') { e.preventDefault(); setActive(activeIdx + 1); }
