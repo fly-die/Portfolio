@@ -14,7 +14,8 @@
   <meta property="og:url" content="https://flynndiener.ch/" />
   <meta property="og:title" content="Flynn Diener" />
   <meta property="og:description" content="CS Student @ UZH" />
-  <meta property="og:image" content="https://flynndiener.ch/og.png" />
+  <meta property="og:image" content="https://flynndiener.ch/og.jpg" />
+  <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -575,12 +576,6 @@
       opacity: 1;
     }
 
-    /* Theme switch: a short crossfade of the whole page where the browser supports it */
-    ::view-transition-old(root),
-    ::view-transition-new(root) {
-      animation-duration: 0.3s;
-    }
-
     @media (prefers-reduced-motion: reduce) {
       html {
         scroll-behavior: auto;
@@ -588,11 +583,6 @@
 
       .theme-toggle svg {
         transition: none;
-      }
-
-      ::view-transition-old(root),
-      ::view-transition-new(root) {
-        animation: none;
       }
 
       #hero,
@@ -1106,8 +1096,9 @@
         try { localStorage.setItem('theme', root.dataset.theme); } catch (e) { }
         syncThemeUI();
       };
-      const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      document.startViewTransition && !reduce ? document.startViewTransition(apply) : apply();
+      // Switch at once. The browser's page crossfade is not used here: on iPhone Safari it could freeze halfway
+      // and leave a grey veil over the page. The fog stirring is the transition.
+      apply();
     }
 
     syncThemeUI();
@@ -1229,7 +1220,7 @@
         c = mix(c, c3, smoothstep(.45, 1., v));
         float k = 1.;                                               // how much of the fog, tint and grain shows here
         if (fade > 1.5) k = pow(smoothstep(1., .3, uv.y), 2.2) * smoothstep(0., .34, uv.y); // closing fog: eases in from the plain page colour and back out before the page ends
-        else if (fade > .5) { c = mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)); k = smoothstep(0., .3, uv.y); } // hero: calm under the name and the nav
+        else if (fade > .5) { c = mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)); k = smoothstep(0., .3, uv.y) * smoothstep(1., .84, uv.y); } // hero: calm under the name and the nav, plain at both edges
         if (fade > 1.5) c = mix(c1, c, k);
         c *= mix(vec3(1.), vec3(1. + .05 * warm, 1., 1. - .07 * warm), k);
         c += (h(gl_FragCoord.xy + fract(t) * 91.) - .5) * .045 * k; // film grain
