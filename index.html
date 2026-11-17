@@ -9,10 +9,25 @@
   <meta name="description"
     content="Computer Science student at the University of Zurich. Software engineer at Hamilton Medical." />
   <link rel="canonical" href="https://www.flynndiener.ch/" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        { "@type": "WebSite", "name": "Flynn Diener", "url": "https://www.flynndiener.ch/" },
+        {
+          "@type": "Person",
+          "name": "Flynn Diener",
+          "url": "https://www.flynndiener.ch/",
+          "sameAs": ["https://github.com/fly-die", "https://www.linkedin.com/in/flynn-diener/"]
+        }
+      ]
+    }
+  </script>
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#070707" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.flynndiener.ch/" />
+  <meta property="og:site_name" content="Flynn Diener" />
   <meta property="og:title" content="Flynn Diener" />
   <meta property="og:description" content="CS Student @ UZH" />
   <meta property="og:image" content="https://www.flynndiener.ch/og.jpg" />
@@ -921,7 +936,7 @@
       <ul id="palette-list">
         <li class="palette-divider">navigate</li>
         <li data-action="section" data-target="#education">Education</li>
-        <li data-action="section" data-target="#languages">Languages</li>
+        <li data-action="section" data-target="#languages">Programming Languages</li>
         <li data-action="section" data-target="#experience">Experience</li>
         <li data-action="section" data-target="#projects">Projects</li>
         <li class="palette-divider">links</li>
@@ -929,6 +944,8 @@
         <li data-action="url" data-target="https://www.linkedin.com/in/flynn-diener/">LinkedIn <span
             class="palette-key">↗</span></li>
         <li data-action="copy" data-target="flynn.diener@gmail.com">Copy Email</li>
+        <li data-action="download" data-target="CV_EN_WS.pdf">Download CV (EN) <span class="palette-key">↓</span></li>
+        <li data-action="download" data-target="CV_DE_WS.pdf">Download CV (DE) <span class="palette-key">↓</span></li>
         <li class="palette-divider">settings</li>
         <li data-action="theme">Toggle Theme <span class="palette-key">T</span></li>
         <li id="palette-empty" class="palette-divider" hidden>no matches</li>
@@ -994,14 +1011,16 @@
     </section>
 
     <section id="languages">
-      <p class="section-label reveal">Languages</p>
+      <p class="section-label reveal">Programming</p>
       <div class="skill-group reveal">
         <div class="skill-tags">
           <span class="tag">Python</span>
           <span class="tag">Java</span>
           <span class="tag">C</span>
-          <span class="tag">HTML/CSS</span>
+          <span class="tag">TypeScript</span>
           <span class="tag">JavaScript</span>
+          <span class="tag">SQL</span>
+          <span class="tag">HTML/CSS</span>
         </div>
       </div>
     </section>
@@ -1086,6 +1105,7 @@
           <div class="project-meta">
             <span class="tag">2026</span>
             <span class="tag">Group Project</span>
+            <span class="tag">Lead Frontend Developer</span>
           </div>
           <p>
             Movie recommendation engine that helps groups find films they'll all enjoy. Analyzes user preferences from
@@ -1237,6 +1257,12 @@
       if (action === 'section') document.querySelector(target)?.scrollIntoView({ behavior: 'smooth' });
       else if (action === 'url') window.open(target, '_blank', 'noopener');
       else if (action === 'copy') navigator.clipboard.writeText(target).catch(() => { });
+      else if (action === 'download') {
+        const a = document.createElement('a');
+        a.href = target;
+        a.download = '';
+        a.click();
+      }
       else if (action === 'theme') toggleTheme();
     }
 
