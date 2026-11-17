@@ -7,21 +7,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flynn Diener</title>
   <meta name="description"
-    content="Flynn Diener, Computer Science student at the University of Zurich and working student software engineer at Hamilton Medical." />
+    content="Computer Science student at the University of Zurich. Software engineer at Hamilton Medical." />
+  <link rel="canonical" href="https://www.flynndiener.ch/" />
   <meta name="color-scheme" content="dark light" />
   <meta name="theme-color" content="#070707" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://flynndiener.ch/" />
+  <meta property="og:url" content="https://www.flynndiener.ch/" />
   <meta property="og:title" content="Flynn Diener" />
   <meta property="og:description" content="CS Student @ UZH" />
-  <meta property="og:image" content="https://flynndiener.ch/og.jpg" />
+  <meta property="og:image" content="https://www.flynndiener.ch/og.jpg" />
   <meta property="og:image:type" content="image/jpeg" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
-  <link rel="icon" href="favicon.ico" sizes="32x32" />
-  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="icon" href="/favicon.ico" sizes="48x48" />
+  <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
+  <link rel="icon" href="/favicon-192x192.png" type="image/png" sizes="192x192" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <script>
     // Apply the saved or system theme before first paint, so the page never flashes the wrong colours
     (function () {
@@ -644,6 +647,34 @@
       color: var(--text);
     }
 
+    #palette-input {
+      flex: 1;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font: inherit;
+      color: var(--text);
+      caret-color: var(--text);
+    }
+
+    #palette-input::placeholder {
+      color: var(--text-dim);
+      opacity: 1;
+    }
+
+    @media (pointer: coarse) {
+      /* below 16px, iOS zooms the page when the field takes focus */
+      #palette-input {
+        font-size: 16px;
+      }
+    }
+
+    #palette-list li[hidden] {
+      display: none;
+    }
+
     #palette-list {
       list-style: none;
       padding: 0.35rem;
@@ -884,7 +915,8 @@
     <div id="palette-box">
       <div id="palette-header">
         <span class="p-prompt">&gt;</span>
-        <span>goto</span>
+        <input id="palette-input" type="text" placeholder="goto" autocomplete="off" autocapitalize="off"
+          spellcheck="false" aria-label="Search commands" />
       </div>
       <ul id="palette-list">
         <li class="palette-divider">navigate</li>
@@ -899,6 +931,7 @@
         <li data-action="copy" data-target="flynn.diener@gmail.com">Copy Email</li>
         <li class="palette-divider">settings</li>
         <li data-action="theme">Toggle Theme <span class="palette-key">T</span></li>
+        <li id="palette-empty" class="palette-divider" hidden>no matches</li>
       </ul>
     </div>
   </div>
@@ -1153,25 +1186,49 @@
 
     // --- COMMAND PALETTE ---
     const palette = document.getElementById('palette');
+    const paletteInput = document.getElementById('palette-input');
+    const paletteEmpty = document.getElementById('palette-empty');
     const actionItems = [...document.querySelectorAll('#palette-list li[data-action]')];
+    const dividers = [...document.querySelectorAll('#palette-list .palette-divider:not(#palette-empty)')];
+    let visibleItems = actionItems;
     let activeIdx = 0;
 
+    // An item is found by its own label or by the name of the group it sits in
+    let group = '';
+    document.querySelectorAll('#palette-list li:not(#palette-empty)').forEach(li => {
+      if (li.classList.contains('palette-divider')) { group = li.textContent.trim(); return; }
+      li.dataset.group = group;
+      li.dataset.search = (li.firstChild.textContent.trim() + ' ' + group).toLowerCase();
+    });
+
+    function filterPalette() {
+      const terms = paletteInput.value.toLowerCase().split(/\s+/).filter(Boolean);
+      actionItems.forEach(li => { li.hidden = !terms.every(t => li.dataset.search.includes(t)); });
+      visibleItems = actionItems.filter(li => !li.hidden);
+      dividers.forEach(d => { d.hidden = !visibleItems.some(li => li.dataset.group === d.textContent.trim()); });
+      paletteEmpty.hidden = visibleItems.length > 0;
+      setActive(0);
+    }
 
     function openPalette() {
       palette.hidden = false;
-      setActive(0);
+      paletteInput.value = '';
+      filterPalette();
+      paletteInput.focus();
       document.body.style.overflow = 'hidden';
     }
 
     function closePalette() {
       palette.hidden = true;
+      paletteInput.blur();
       document.body.style.overflow = '';
     }
 
     function setActive(i) {
       actionItems.forEach(li => li.classList.remove('active'));
-      activeIdx = Math.max(0, Math.min(i, actionItems.length - 1));
-      actionItems[activeIdx].classList.add('active');
+      if (!visibleItems.length) { activeIdx = -1; return; }
+      activeIdx = Math.max(0, Math.min(i, visibleItems.length - 1));
+      visibleItems[activeIdx].classList.add('active');
     }
 
     function runItem(li) {
@@ -1194,13 +1251,14 @@
         if (e.key === 'Escape') closePalette();
         else if (e.key === 'ArrowDown') { e.preventDefault(); setActive(activeIdx + 1); }
         else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(activeIdx - 1); }
-        else if (e.key === 'Enter') runItem(actionItems[activeIdx]);
+        else if (e.key === 'Enter' && visibleItems[activeIdx]) runItem(visibleItems[activeIdx]);
       }
     });
 
     document.getElementById('palette-backdrop').addEventListener('click', closePalette);
-    actionItems.forEach((li, i) => {
-      li.addEventListener('mouseenter', () => setActive(i));
+    paletteInput.addEventListener('input', filterPalette);
+    actionItems.forEach(li => {
+      li.addEventListener('mouseenter', () => setActive(visibleItems.indexOf(li)));
       li.addEventListener('click', () => runItem(li));
     });
     // --- FOG ---
