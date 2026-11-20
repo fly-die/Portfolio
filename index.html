@@ -315,12 +315,16 @@
     }
 
     #projects {
-      padding: 1.75rem 0 2rem;
+      padding: 1.75rem 0 0;
       border-top: 1px solid var(--border);
     }
 
     #projects .project:first-of-type {
       border-top: none;
+    }
+
+    #projects .project:last-of-type {
+      padding-bottom: 0;
     }
 
     section:not(#hero) {
@@ -786,7 +790,7 @@
     .outro { position: relative; height: 62vh; min-height: 340px; }
     .outro .fog { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-    main { max-width: none; padding: 0 var(--pad) 2rem; }
+    main { max-width: none; padding: 0 var(--pad); }
 
     @media (max-width: 640px) {
       :root { --pad: 1.1rem; }
@@ -798,8 +802,8 @@
       .hero-side { padding-bottom: 0; }
       .hero-links { gap: 0.6rem 1.3rem; }
       .btn { padding: 0.25rem 0; }        /* bigger tap targets */
-      main { padding: 0 var(--pad) 1rem; }
-      .outro { height: 52vh; }
+      main { padding: 0 var(--pad); }
+      .outro { height: 36vh; min-height: 260px; }
       #background { padding-top: 3rem; }
       .project { gap: 1.25rem; padding: 1.25rem 0 3.25rem; }
       .project-content { gap: 1.75rem; }
