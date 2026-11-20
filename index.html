@@ -315,7 +315,12 @@
     }
 
     #projects {
-      padding-top: 4.5rem;
+      padding: 1.75rem 0 2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    #projects .project:first-of-type {
+      border-top: none;
     }
 
     section:not(#hero) {
@@ -464,8 +469,7 @@
 
     /* BACKGROUND: experience, education and programming, compact, side by side */
     #background {
-      padding: 1.75rem 0 5rem;
-      border-top: 1px solid var(--border);
+      padding: 4.5rem 0 4rem;
     }
 
     .background {
@@ -522,11 +526,6 @@
       gap: 0 1.25rem;
       padding: 0.45rem 0;
       border-top: 1px solid var(--border);
-    }
-
-    .bg-rows .bg-sub {
-      font-size: 0.94em;
-      color: var(--text-dim);
     }
 
     .bg-date {
@@ -801,12 +800,12 @@
       .btn { padding: 0.25rem 0; }        /* bigger tap targets */
       main { padding: 0 var(--pad) 1rem; }
       .outro { height: 52vh; }
-      #projects { padding-top: 3rem; }
+      #background { padding-top: 3rem; }
       .project { gap: 1.25rem; padding: 1.25rem 0 3.25rem; }
       .project-content { gap: 1.75rem; }
       .project-cover { aspect-ratio: 16 / 9; }
       .project-buttons { gap: 0.5rem 1.3rem; }
-      #background { padding-bottom: 3.5rem; }
+      #background { padding-bottom: 3rem; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -831,8 +830,8 @@
       </div>
       <ul id="palette-list">
         <li class="palette-divider">navigate</li>
-        <li data-action="section" data-target="#projects" data-keywords="work collabitat movieblendr">Projects</li>
         <li data-action="section" data-target="#background" data-keywords="experience education programming languages">Background</li>
+        <li data-action="section" data-target="#projects" data-keywords="work collabitat movieblendr">Projects</li>
         <li class="palette-divider">links</li>
         <li data-action="url" data-target="https://github.com/fly-die">GitHub <span class="palette-key">↗</span></li>
         <li data-action="url" data-target="https://www.linkedin.com/in/flynn-diener/">LinkedIn <span
@@ -851,8 +850,8 @@
     <a href="#hero" class="nav-logo">FD</a>
     <div class="nav-right">
       <ul class="nav-links">
-        <li><a href="#projects">Projects</a></li>
         <li><a href="#background">Background</a></li>
+        <li><a href="#projects">Projects</a></li>
       </ul>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode">
         <svg viewBox="0 0 16 16" aria-hidden="true">
@@ -882,6 +881,50 @@
   </header>
 
   <main>
+
+    <section id="background">
+      <p class="section-label reveal">Background</p>
+      <div class="background">
+
+        <div class="bg-col reveal" id="experience">
+          <h3 class="bg-label">Experience</h3>
+          <p class="bg-org"><a href="https://www.hamilton-medical.com/" class="org-link" target="_blank"
+              rel="noopener">Hamilton Medical AG</a><span class="bg-loc">Bonaduz</span></p>
+          <ul class="bg-rows">
+            <li><span>Working Student</span><span class="bg-date">Oct 2026 – Present</span></li>
+            <li><span>Software Engineer Intern</span><span class="bg-date">Jun – Sep 2026</span></li>
+          </ul>
+          <p class="bg-org"><a href="https://upgreat.ch" class="org-link" target="_blank"
+              rel="noopener">UPGREAT AG</a><span class="bg-loc">Fehraltorf</span></p>
+          <ul class="bg-rows">
+            <li><span>Research Intern</span><span class="bg-date">Apr – Jul 2024</span></li>
+          </ul>
+        </div>
+
+        <div class="bg-col reveal" id="education">
+          <h3 class="bg-label">Education</h3>
+          <p class="bg-org"><a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">University of
+              Zurich (UZH)</a><span class="bg-loc">Zurich</span></p>
+          <ul class="bg-rows">
+            <li><span>BSc Computer Science</span><span class="bg-date">2024 – 2027</span></li>
+          </ul>
+        </div>
+
+        <div class="bg-col bg-col-narrow reveal" id="languages">
+          <h3 class="bg-label">Programming</h3>
+          <div class="skill-tags">
+            <span class="tag">Python</span>
+            <span class="tag">Java</span>
+            <span class="tag">C</span>
+            <span class="tag">TypeScript</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">SQL</span>
+            <span class="tag">HTML/CSS</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <section id="projects">
       <p class="section-label reveal">Projects</p>
@@ -957,52 +1000,6 @@
           </div>
         </div>
       </article>
-    </section>
-
-    <section id="background">
-      <p class="section-label reveal">Background</p>
-      <div class="background">
-
-        <div class="bg-col reveal" id="experience">
-          <h3 class="bg-label">Experience</h3>
-          <p class="bg-org"><a href="https://www.hamilton-medical.com/" class="org-link" target="_blank"
-              rel="noopener">Hamilton Medical AG</a><span class="bg-loc">Bonaduz</span></p>
-          <ul class="bg-rows">
-            <li><span>Working Student</span><span class="bg-date">Oct 2026 – Present</span></li>
-            <li><span>Software Engineer Intern</span><span class="bg-date">Jun – Sep 2026</span></li>
-          </ul>
-          <p class="bg-org"><a href="https://upgreat.ch" class="org-link" target="_blank"
-              rel="noopener">UPGREAT AG</a><span class="bg-loc">Fehraltorf</span></p>
-          <ul class="bg-rows">
-            <li><span>Research Intern</span><span class="bg-date">Apr – Jul 2024</span></li>
-          </ul>
-        </div>
-
-        <div class="bg-col reveal" id="education">
-          <h3 class="bg-label">Education</h3>
-          <p class="bg-org"><a href="https://uzh.ch" class="org-link" target="_blank" rel="noopener">University of
-              Zurich (UZH)</a><span class="bg-loc">Zurich</span></p>
-          <ul class="bg-rows">
-            <li><span>BSc Computer Science</span><span class="bg-date">2024 – 2027</span></li>
-            <li class="bg-sub">Major: Business Informatics</li>
-            <li class="bg-sub">Minor: Software Systems</li>
-          </ul>
-        </div>
-
-        <div class="bg-col bg-col-narrow reveal" id="languages">
-          <h3 class="bg-label">Programming</h3>
-          <div class="skill-tags">
-            <span class="tag">Python</span>
-            <span class="tag">Java</span>
-            <span class="tag">C</span>
-            <span class="tag">TypeScript</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">SQL</span>
-            <span class="tag">HTML/CSS</span>
-          </div>
-        </div>
-
-      </div>
     </section>
 
   </main>
