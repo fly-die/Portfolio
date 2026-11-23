@@ -382,8 +382,8 @@
       display: flex;
       flex-wrap: wrap-reverse;
       align-items: stretch;
-      gap: 1.75rem 3.5rem;
-      padding: 1.75rem 0 4.75rem;
+      gap: 1.5rem 3rem;
+      padding: 1.5rem 0 3.25rem;
       border-top: 1px solid var(--border);
     }
 
@@ -397,16 +397,17 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 2.5rem;
+      gap: 1.75rem;
     }
 
     .project-cover {
-      flex: 1.6 1 420px;
+      flex: 1.15 1 380px;
       min-width: 0;
       display: block;
-      aspect-ratio: 16 / 10;
+      align-self: flex-start;
+      aspect-ratio: 1200 / 630;
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 14px;
       overflow: hidden;
       transition: border-color 0.3s;
     }
@@ -424,6 +425,7 @@
       display: block;
       width: 100%;
       height: 100%;
+      object-fit: cover;
     }
 
     a.project-cover .cover {
@@ -450,10 +452,10 @@
 
     .project-title {
       font-weight: 450;
-      font-size: clamp(2.5rem, 4.8vw, 4.5rem);
+      font-size: clamp(2.1rem, 3.6vw, 2.9rem);
       line-height: 0.98;
       letter-spacing: -0.045em;
-      margin: 0 0 1.5rem -0.04em;
+      margin: 0 0 1.15rem -0.04em;
     }
 
     .project-content p {
@@ -829,7 +831,6 @@
       #background { padding-top: 3rem; }
       .project { gap: 1.25rem; padding: 1.25rem 0 3.25rem; }
       .project-content { gap: 1.75rem; }
-      .project-cover { aspect-ratio: 16 / 9; }
       .project-buttons { gap: 0.5rem 1.3rem; }
       #background { padding-bottom: 3rem; }
     }
@@ -993,13 +994,13 @@
         </div>
         <a class="project-cover" href="https://fly-die.github.io/collabitat-web/" target="_blank" rel="noopener"
           aria-label="Open the Collabitat live app">
-          <canvas class="fog cover" data-tint="#1E4D3B" aria-hidden="true"></canvas>
+          <img class="cover" src="collabitat-cover.png" alt="" width="1200" height="630" loading="lazy" />
         </a>
       </article>
 
       <article class="project project-flip reveal">
         <div class="project-cover">
-          <canvas class="fog cover" data-tint="#9c2f27" aria-hidden="true"></canvas>
+          <img class="cover" src="movieblendr-cover.png" alt="" width="1200" height="630" loading="lazy" />
         </div>
         <div class="project-content">
           <div>
@@ -1060,7 +1061,7 @@
         </div>
         <a class="project-cover" href="https://thereminal.vercel.app" target="_blank" rel="noopener"
           aria-label="Open the thereminal live app">
-          <canvas class="fog cover" data-tint="#3d3a9e" aria-hidden="true"></canvas>
+          <img class="cover" src="thereminal-cover.png" alt="" width="1200" height="630" loading="lazy" />
         </a>
       </article>
     </section>
