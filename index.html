@@ -428,6 +428,11 @@
       object-fit: cover;
     }
 
+    /* each cover has a dark and a light version, shown to match the theme */
+    .cover-light { display: none; }
+    [data-theme="light"] .cover-dark { display: none; }
+    [data-theme="light"] .cover-light { display: block; }
+
     a.project-cover .cover {
       transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
     }
@@ -994,13 +999,15 @@
         </div>
         <a class="project-cover" href="https://fly-die.github.io/collabitat-web/" target="_blank" rel="noopener"
           aria-label="Open the Collabitat live app">
-          <img class="cover" src="collabitat-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-dark" src="collabitat-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-light" src="collabitat-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
         </a>
       </article>
 
       <article class="project project-flip reveal">
         <div class="project-cover">
-          <img class="cover" src="movieblendr-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-dark" src="movieblendr-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-light" src="movieblendr-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
         </div>
         <div class="project-content">
           <div>
@@ -1061,7 +1068,8 @@
         </div>
         <a class="project-cover" href="https://thereminal.vercel.app" target="_blank" rel="noopener"
           aria-label="Open the thereminal live app">
-          <img class="cover" src="thereminal-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-dark" src="thereminal-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-light" src="thereminal-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
         </a>
       </article>
     </section>
