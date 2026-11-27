@@ -319,11 +319,11 @@
       border-top: 1px solid var(--border);
     }
 
-    #projects .project:first-of-type {
+    #projects > .project:first-of-type {
       border-top: none;
     }
 
-    #projects .project:last-of-type {
+    .more-inner > .project:last-child {
       padding-bottom: 0;
     }
 
@@ -476,6 +476,158 @@
       gap: 0.5rem 1.5rem;
       padding-top: 1rem;
       border-top: 1px solid var(--border);
+    }
+
+    /* SIDE PROJECTS: folded away behind one quiet row, opened in place */
+    .more-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      width: 100%;
+      padding: 1.5rem 0 0.25rem;
+      border: 0;
+      border-top: 1px solid var(--border);
+      background: none;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .more-toggle:focus-visible {
+      outline: 1px solid var(--text);
+      outline-offset: 4px;
+    }
+
+    .more-label {
+      color: var(--text);
+    }
+
+    .more-peek {
+      display: flex;
+      transition: opacity 0.4s, transform 0.4s;
+    }
+
+    .more-peek img {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      box-shadow: 0 0 0 2px var(--bg);
+      transition: transform 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .more-peek img + img {
+      margin-left: -5px;
+    }
+
+    .more-toggle:hover .more-peek img + img {
+      transform: translateX(7px);
+    }
+
+    .more-names {
+      color: var(--text-faint);
+      white-space: nowrap;
+      transition: opacity 0.4s, transform 0.4s, color 0.15s;
+    }
+
+    .more-toggle:hover .more-names {
+      color: var(--text-dim);
+      transform: translateX(7px);
+    }
+
+    .more-rule {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      transform-origin: left;
+      transition: background 0.3s;
+    }
+
+    .more-toggle:hover .more-rule {
+      background: var(--rail);
+    }
+
+    .more-action {
+      transition: color 0.15s;
+    }
+
+    .more-toggle:hover .more-action {
+      color: var(--text);
+    }
+
+    .more-hide,
+    .more.open .more-show {
+      display: none;
+    }
+
+    .more.open .more-hide {
+      display: inline;
+    }
+
+    /* a plus that folds into a minus */
+    .more-icon {
+      position: relative;
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+    }
+
+    .more-icon::before,
+    .more-icon::after {
+      content: '';
+      position: absolute;
+      inset: 4px 0 auto;
+      height: 1px;
+      background: var(--text-faint);
+      transition: transform 0.45s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.15s;
+    }
+
+    .more-icon::after {
+      transform: rotate(90deg);
+    }
+
+    .more-toggle:hover .more-icon::before,
+    .more-toggle:hover .more-icon::after {
+      background: var(--text);
+    }
+
+    .more.open .more-icon::after {
+      transform: rotate(180deg);
+    }
+
+    .more.open .more-peek,
+    .more.open .more-names {
+      opacity: 0;
+      transform: translateX(-6px);
+    }
+
+    .more-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.75s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .more.open .more-body {
+      grid-template-rows: 1fr;
+    }
+
+    .more-inner {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .more-inner > .project:first-child {
+      border-top: none;
+      padding-top: 2.25rem;
+    }
+
+    @media (max-width: 640px) {
+      .more-names { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .more-body { transition: none; }
     }
 
     /* BACKGROUND: experience, education and programming, compact, side by side */
@@ -863,7 +1015,7 @@
       <ul id="palette-list">
         <li class="palette-divider">navigate</li>
         <li data-action="section" data-target="#background" data-keywords="experience education thesis programming languages">Background</li>
-        <li data-action="section" data-target="#projects" data-keywords="work collabitat movieblendr thereminal">Projects</li>
+        <li data-action="section" data-target="#projects" data-keywords="work collabitat movieblendr thereminal glyph side">Projects</li>
         <li class="palette-divider">links</li>
         <li data-action="url" data-target="https://github.com/fly-die">GitHub <span class="palette-key">↗</span></li>
         <li data-action="url" data-target="https://www.linkedin.com/in/flynn-diener/">LinkedIn <span
@@ -970,6 +1122,47 @@
         <div class="project-content">
           <div>
             <div class="project-header">
+              <img src="logo.png" alt="" class="project-logo-inline" />
+              <div class="project-meta">
+                <span class="tag">2026</span>
+                <span class="tag">Group Project</span>
+                <span class="tag">Lead Frontend Developer</span>
+              </div>
+            </div>
+            <h2 class="project-title">Movieblendr</h2>
+            <p>
+              Movie recommendation engine that helps groups find films they'll all enjoy. Analyzes user preferences
+              from Letterboxd data using graph-based algorithms and MovieLens training data.
+            </p>
+            <div class="project-stack">
+              <span class="tag">Python</span>
+              <span class="tag">Java</span>
+              <span class="tag">JavaScript</span>
+              <span class="tag">React</span>
+            </div>
+          </div>
+          <div class="project-buttons">
+            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn" target="_blank"
+              rel="noopener">Client Repo</a>
+            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn" target="_blank"
+              rel="noopener">Server Repo</a>
+          </div>
+        </div>
+        <div class="project-cover">
+          <img class="cover cover-dark" src="movieblendr-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-light" src="movieblendr-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
+        </div>
+      </article>
+
+      <article class="project project-flip reveal">
+        <a class="project-cover" href="https://fly-die.github.io/collabitat-web/" target="_blank" rel="noopener"
+          aria-label="Open the Collabitat live app">
+          <img class="cover cover-dark" src="collabitat-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-light" src="collabitat-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
+        </a>
+        <div class="project-content">
+          <div>
+            <div class="project-header">
               <img src="collabitat-logo.svg" alt="" class="project-logo-inline" />
               <div class="project-meta">
                 <span class="tag">2026</span>
@@ -997,48 +1190,21 @@
               Repo</a>
           </div>
         </div>
-        <a class="project-cover" href="https://fly-die.github.io/collabitat-web/" target="_blank" rel="noopener"
-          aria-label="Open the Collabitat live app">
-          <img class="cover cover-dark" src="collabitat-cover.png" alt="" width="1200" height="630" loading="lazy" />
-          <img class="cover cover-light" src="collabitat-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
-        </a>
       </article>
 
-      <article class="project project-flip reveal">
-        <div class="project-cover">
-          <img class="cover cover-dark" src="movieblendr-cover.png" alt="" width="1200" height="630" loading="lazy" />
-          <img class="cover cover-light" src="movieblendr-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
-        </div>
-        <div class="project-content">
-          <div>
-            <div class="project-header">
-              <img src="logo.png" alt="" class="project-logo-inline" />
-              <div class="project-meta">
-                <span class="tag">2026</span>
-                <span class="tag">Group Project</span>
-                <span class="tag">Lead Frontend Developer</span>
-              </div>
-            </div>
-            <h2 class="project-title">Movieblendr</h2>
-            <p>
-              Movie recommendation engine that helps groups find films they'll all enjoy. Analyzes user preferences
-              from Letterboxd data using graph-based algorithms and MovieLens training data.
-            </p>
-            <div class="project-stack">
-              <span class="tag">Python</span>
-              <span class="tag">Java</span>
-              <span class="tag">JavaScript</span>
-              <span class="tag">React</span>
-            </div>
-          </div>
-          <div class="project-buttons">
-            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-client" class="btn" target="_blank"
-              rel="noopener">Client Repo</a>
-            <a href="https://github.com/fabianbaechli/sopra-fs26-group-41-server" class="btn" target="_blank"
-              rel="noopener">Server Repo</a>
-          </div>
-        </div>
-      </article>
+      <div class="more" id="side-projects">
+        <button class="more-toggle reveal" type="button" aria-expanded="false" aria-controls="side-projects-list">
+          <span class="more-label">Side projects</span>
+          <span class="more-peek" aria-hidden="true">
+            <img src="thereminal-logo.svg" alt="" /><img src="glyph-logo.svg" alt="" />
+          </span>
+          <span class="more-names">thereminal, glyph</span>
+          <span class="more-rule" aria-hidden="true"></span>
+          <span class="more-action"><span class="more-show">Show</span><span class="more-hide">Hide</span></span>
+          <span class="more-icon" aria-hidden="true"></span>
+        </button>
+        <div class="more-body" id="side-projects-list">
+          <div class="more-inner">
       <article class="project reveal">
         <div class="project-content">
           <div>
@@ -1062,16 +1228,53 @@
             </div>
           </div>
           <div class="project-buttons">
-            <a href="https://thereminal.vercel.app" class="btn" target="_blank" rel="noopener">Live App</a>
+            <a href="https://thereminal.flynndiener.ch" class="btn" target="_blank" rel="noopener">Live App</a>
             <a href="https://github.com/fly-die/thereminal" class="btn" target="_blank" rel="noopener">Repo</a>
           </div>
         </div>
-        <a class="project-cover" href="https://thereminal.vercel.app" target="_blank" rel="noopener"
+        <a class="project-cover" href="https://thereminal.flynndiener.ch" target="_blank" rel="noopener"
           aria-label="Open the thereminal live app">
           <img class="cover cover-dark" src="thereminal-cover.png" alt="" width="1200" height="630" loading="lazy" />
           <img class="cover cover-light" src="thereminal-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
         </a>
       </article>
+      <article class="project project-flip reveal">
+        <a class="project-cover" href="https://glyph.flynndiener.ch" target="_blank" rel="noopener"
+          aria-label="Open the glyph live app">
+          <img class="cover cover-dark" src="glyph-cover.png" alt="" width="1200" height="630" loading="lazy" />
+          <img class="cover cover-light" src="glyph-cover-light.png" alt="" width="1200" height="630" loading="lazy" />
+        </a>
+        <div class="project-content">
+          <div>
+            <div class="project-header">
+              <img src="glyph-logo.svg" alt="" class="project-logo-inline" />
+              <div class="project-meta">
+                <span class="tag">2026</span>
+                <span class="tag">Solo Project</span>
+              </div>
+            </div>
+            <h2 class="project-title">glyph</h2>
+            <p>
+              Turns handwriting into an installable font. Draw each letter on screen or on a printed sheet, then
+              export a kerned .otf or .woff2 with up to three versions per letter. Runs in the browser, nothing is
+              uploaded.
+            </p>
+            <div class="project-stack">
+              <span class="tag">TypeScript</span>
+              <span class="tag">opentype.js</span>
+              <span class="tag">Canvas</span>
+              <span class="tag">Vite</span>
+            </div>
+          </div>
+          <div class="project-buttons">
+            <a href="https://glyph.flynndiener.ch" class="btn" target="_blank" rel="noopener">Live App</a>
+            <a href="https://github.com/fly-die/glyph" class="btn" target="_blank" rel="noopener">Repo</a>
+          </div>
+        </div>
+      </article>
+          </div>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -1149,6 +1352,18 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Side projects: open and close in place. While closed the list is inert, so its links are not tabbable.
+    const more = document.getElementById('side-projects');
+    const moreToggle = more.querySelector('.more-toggle');
+    const moreBody = more.querySelector('.more-body');
+    function setMore(open) {
+      more.classList.toggle('open', open);
+      moreToggle.setAttribute('aria-expanded', String(open));
+      moreBody.inert = !open;
+    }
+    setMore(false);
+    moreToggle.addEventListener('click', () => setMore(!more.classList.contains('open')));
 
     // --- COMMAND PALETTE ---
     const palette = document.getElementById('palette');
