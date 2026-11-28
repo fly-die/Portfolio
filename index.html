@@ -954,18 +954,20 @@
     nav { padding: 1.1rem var(--pad); background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; transition: border-color 0.2s, background 0.3s; }
     nav.scrolled { background: var(--nav-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
 
-    /* hero: full first screen, light above, name and links resting at the bottom */
+    /* hero: full first screen, the name in the middle of the fog, the links resting at the bottom */
     #hero {
       position: relative; display: flex; align-items: flex-end; animation: fadein 1.2s ease both;
-      height: 100vh; height: 100svh; min-height: 520px; padding: 0 var(--pad) var(--pad);
+      height: 100vh; height: 100svh; min-height: 520px; padding: 0 var(--pad) 3.5rem;
     }
     /* the hero fog is pinned behind the page and dissolves as you scroll, so it never ends in an edge */
     #hero-fog { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; z-index: -1; opacity: 0; }
-    .hero-inner { position: relative; width: 100%; display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem 4rem; flex-wrap: wrap; }
-    h1 { font-weight: 450; font-size: clamp(3.4rem, 8.2vw, 7.6rem); line-height: 0.92; letter-spacing: -0.05em; margin: 0 0 0 -0.04em; }
-    h1 { white-space: nowrap; }
-    .hero-side { padding-bottom: 0.6rem; }
+    .hero-inner { width: 100%; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    h1 { font-weight: 450; font-size: clamp(3.4rem, 8.2vw, 7.6rem); line-height: 0.92; letter-spacing: -0.05em; white-space: nowrap; }
+    h1 { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; opacity: 0.68; }
+    /* once the fog has drawn the name into itself, the real heading stays for readers and selection but is not painted */
+    .fog-name h1 { color: transparent; opacity: 1; }
     .hero-sub { font-size: 17px; color: var(--text); margin-bottom: 0.9rem; }
+    .hero-links { justify-content: center; }
 
     /* the page ends the way it starts: the fog comes back up from below */
     .outro { position: relative; height: 62vh; min-height: 340px; }
@@ -977,10 +979,8 @@
       :root { --pad: 1.1rem; }
       nav { padding: 0.9rem var(--pad); }
       .nav-right { gap: 1.1rem; }
-      #hero { padding: 0 var(--pad) 1.6rem; }
-      .hero-inner { gap: 1.4rem; }
+      #hero { padding: 0 var(--pad) 2.2rem; }
       h1 { font-size: min(15.2vw, 5.2rem); }
-      .hero-side { padding-bottom: 0; }
       .hero-links { gap: 0.6rem 1.3rem; }
       .btn { padding: 0.25rem 0; }        /* bigger tap targets */
       main { padding: 0 var(--pad); }
@@ -1451,9 +1451,10 @@
     // --- FOG ---
     // One small shader, used for the hero and for each project cover. It only runs while it is on screen.
     const TONES = { dark: ['#070707', '#3b3936', '#d9d3c5'], light: ['#e9e4d7', '#bcb6a9', '#4f4c46'] };
+    const INK = { dark: '#e6e1d7', light: '#181715' };
     const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
     const FOG_FS = `precision highp float;
-      uniform vec2 r, m; uniform float t, warm, fade; uniform vec3 c1, c2, c3;
+      uniform vec2 r, m; uniform float t, warm, fade, name, sy; uniform vec3 c1, c2, c3, ink; uniform sampler2D tx;
       float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
       float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * f * (f * (f * 6. - 15.) + 10.);
         return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
@@ -1466,10 +1467,15 @@
         c = mix(c, c3, smoothstep(.45, 1., v));
         float k = 1.;                                               // how much of the fog, tint and grain shows here
         if (fade > 1.5) k = pow(smoothstep(1., .3, uv.y), 2.2) * smoothstep(0., .34, uv.y); // closing fog: eases in from the plain page colour and back out before the page ends
-        else if (fade > .5) { c = mix(c1, c, smoothstep(.1, .62, uv.y) * smoothstep(1., .84, uv.y)); k = smoothstep(0., .3, uv.y) * smoothstep(1., .84, uv.y); } // hero: calm under the name and the nav, plain at both edges
-        if (fade > 1.5) c = mix(c1, c, k);
+        else if (fade > .5) k = smoothstep(0., .2, uv.y) * smoothstep(1., .86, uv.y) * .75; // hero: fog across the middle, plain at both edges
+        if (fade > .5) c = mix(c1, c, k);
         c *= mix(vec3(1.), vec3(1. + .05 * warm, 1., 1. - .07 * warm), k);
         c += (h(gl_FragCoord.xy + fract(t) * 91.) - .5) * .045 * k; // film grain
+        if (name > .5) {                                            // the name sits in the fog: see-through, with a still, faint grain of its own
+          float a = texture2D(tx, vec2(uv.x, uv.y - sy)).r, g = h(floor(gl_FragCoord.xy / 1.5));
+          float d = mix(.7, .6, smoothstep(.36, .7, fbm(p * 1.2 + q * 1.2 + 5.)));  // a touch fainter where fog drifts over it
+          c = mix(c, ink * (.93 + .14 * g), a * d * (.9 + .1 * g));
+        }
         gl_FragColor = vec4(c, 1.);
       }`;
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1499,7 +1505,29 @@
       };
       const cur = tones(), mouse = [0.5, 0.5], seed = Math.random() * 500, t0 = performance.now();
       let extra = 0;
-      const resize = () => { const d = Math.min(devicePixelRatio || 1, 1.5); canvas.width = canvas.clientWidth * d; canvas.height = canvas.clientHeight * d; gl.viewport(0, 0, canvas.width, canvas.height); };
+      const hero = canvas.id === 'hero-fog';
+      // The hero fog also draws the name: the heading is painted to a hidden canvas, exactly where the real <h1> sits, and handed to the shader.
+      const h1 = hero && document.querySelector('#hero h1');
+      const ink = hex(INK[root.dataset.theme]), nameTex = h1 && gl.createTexture(), pen = h1 && document.createElement('canvas');
+      if (h1) {
+        gl.bindTexture(gl.TEXTURE_2D, nameTex);
+        [gl.TEXTURE_MIN_FILTER, gl.TEXTURE_MAG_FILTER].forEach(f => gl.texParameteri(gl.TEXTURE_2D, f, gl.LINEAR));
+        [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(w => gl.texParameteri(gl.TEXTURE_2D, w, gl.CLAMP_TO_EDGE));
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+      }
+      const drawName = () => {
+        if (!h1 || !canvas.width || !canvas.height) return;
+        const d = canvas.width / canvas.clientWidth, box = h1.getBoundingClientRect(), cs = getComputedStyle(h1), x = pen.getContext('2d');
+        pen.width = canvas.width; pen.height = canvas.height;
+        x.fillStyle = '#000'; x.fillRect(0, 0, pen.width, pen.height); x.fillStyle = '#fff';
+        x.font = `${cs.fontWeight} ${parseFloat(cs.fontSize) * d}px ${cs.fontFamily}`; x.textAlign = 'center'; x.textBaseline = 'middle';
+        try { x.letterSpacing = parseFloat(cs.letterSpacing) * d + 'px'; } catch (e) {}
+        x.fillText(h1.textContent, (box.left + box.width / 2) * d, (box.top + scrollY + box.height / 2) * d);
+        gl.bindTexture(gl.TEXTURE_2D, nameTex); gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, pen);
+        root.classList.add('fog-name');
+      };
+      // the hero is drawn a little finer than the other fogs, so the letters stay crisp
+      const resize = () => { const d = Math.min(devicePixelRatio || 1, hero ? 2 : 1.5); canvas.width = canvas.clientWidth * d; canvas.height = canvas.clientHeight * d; gl.viewport(0, 0, canvas.width, canvas.height); drawName(); };
       resize(); addEventListener('resize', resize);
 
       let visible = true, shown = true, running = false;
@@ -1509,6 +1537,11 @@
         // only the mid and far tones drift over
         cur[0] = target[0];
         cur.forEach((c, i) => i && c.forEach((v, k) => { c[k] = v + (target[i][k] - v) * 0.06; if (Math.abs(target[i][k] - v) > 0.002) moving = true; }));
+        if (h1) {
+          hex(INK[root.dataset.theme]).forEach((v, k) => { ink[k] += (v - ink[k]) * 0.06; if (Math.abs(v - ink[k]) > 0.002) moving = true; });
+          gl.uniform1f(U('name'), 1); gl.uniform1i(U('tx'), 0); gl.uniform3fv(U('ink'), ink);
+          gl.uniform1f(U('sy'), scrollY / canvas.clientHeight);   // the name scrolls away with the page while the fog stays put
+        }
         mouse[0] += (pointer[0] - mouse[0]) * 0.03; mouse[1] += (pointer[1] - mouse[1]) * 0.03;
         gl.uniform2f(U('r'), canvas.width, canvas.height); gl.uniform2f(U('m'), mouse[0], mouse[1]);
         const stir = Math.max(0, 1 - (now - stirredAt) / 1600);
@@ -1523,7 +1556,8 @@
       const kick = () => { if (!running) { running = true; requestAnimationFrame(frame); } };
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) kick(); }, { rootMargin: '100px' }).observe(canvas);
       new MutationObserver(() => { stirredAt = performance.now(); kick(); }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-      if (canvas.id === 'hero-fog') {
+      if (hero) {
+        if (document.fonts) document.fonts.ready.then(() => { drawName(); kick(); });   // redraw once the real typeface has arrived
         // gone by the time you are a bit over half a screen down
         let intro = 0;   // 0 to 1: the fade-in after the page has loaded
         const dissolve = () => {
